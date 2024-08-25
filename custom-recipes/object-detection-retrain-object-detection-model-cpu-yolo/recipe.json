@@ -1,0 +1,62 @@
+// This file is the descriptor for the Custom code recipe create_patches
+{
+    // Meta data for display purposes
+    "meta" : {
+        "label" : "Retrain object detection model (CPU) yolo",
+        "description" : "This recipe allows you to fine-tune the detection yolo model to detect new objects.",
+        "icon" : "icon-gears"
+    },
+
+    "kind" : "PYTHON",
+
+
+    // Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
+    // or more dataset to each input and output role.
+
+    // The "arity" field indicates whether the user can associate several datasets to the role ('NARY')
+    // or at most one ('UNARY'). The "required" field indicates whether the user is allowed to
+    // associate no dataset with the role.
+
+    "inputRoles" : [
+        {
+            "name": "images",
+            "label": "Folder containing the images",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        },
+        {
+            "name": "bounding_boxes",
+            "label": "Dataset of bounding boxes",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        },
+        {
+            "name": "weights",
+            "label": "Initial weights",
+            "description": "Initial weights.",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        }
+    ],
+
+    "outputRoles" : [
+        {
+            "name": "model",
+            "label": "Trained model",
+            "description": "Folder where the trained model will be stored.",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        }
+    ],
+
+    "paramsTemplate" : "retrain-recipe-template.html",
+    "paramsModule" : "detectionRecipe.retrain",
+    "paramsPythonSetup": "recipes-helper.py"
+}

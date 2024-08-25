@@ -1,0 +1,65 @@
+/* This file is the descriptor for the python runnable transferme_Download pre-trained models */
+{
+    /* Meta data for display purposes */
+    "meta" : {
+        "label" : "Download pre-trained detection model (CPU) yolo",
+        "description" : "Use this macro to download model weights to your project.",
+        "icon" : "icon-cloud-download"
+    },
+
+    /* whether the runnable's code is untrusted */
+    "impersonate" : false,
+    
+    /* list of required permissions on the project to see/run the runnable */
+    "permissions" : ["WRITE_CONF"],
+
+    /* what the code's run() returns:
+       - NONE : no result
+       - HTML : a string that is a html (utf8 encoded)
+       - FOLDER_FILE : a (folderId, path) pair to a file in a folder of this project (json-encoded)
+       - FILE : raw data (as a python string) that will be stored in a temp file by DSS
+       - URL : a url
+     */    
+    "resultType" : "HTML",
+    
+    /* label to use when the runnable's result is not inlined in the UI (ex: for urls) */
+    "resultLabel" : "model download output",
+    
+    /* for FILE resultType, the extension to use for the temp file */
+/*    "extension" : "txt",*/
+    
+    /* for FILE resultType, the type of data stored in the temp file */
+/*    "mimeType" : "text/plain",*/
+
+    /* The field "params" holds a list of all the params
+       for wich the user will be prompted for values:
+
+       The available parameter types are:
+       STRING, INT, DOUBLE, BOOLEAN, PASSWORD, SELECT, MAP, TEXTAREA
+    */
+    
+    "params": [
+        {
+            "name": "folder_name",
+            "label" : "Output folder name",
+            "type": "STRING",
+            "description":"Use a different folder for each downloaded model.",
+            "mandatory" : true
+        },
+        
+        /* A "SELECT" parameter is a multi-choice selector. Choices are specified using the selectChoice field*/
+        {
+            "name": "model",
+            "label": "Pre-trained detection yolo model to download",
+            "type": "SELECT",
+            "selectChoices": [
+                {
+                    "label": "RetinaNet trained on COCO",
+                    "value": "retinanet_coco"
+                }
+            ],
+            "defaultValue": "retinanet_coco",
+            "mandatory": true
+        }
+    ]
+}

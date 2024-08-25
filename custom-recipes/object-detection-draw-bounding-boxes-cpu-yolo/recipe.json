@@ -1,0 +1,54 @@
+// This file is the descriptor for the Custom code recipe detect_cars
+{
+    // Meta data for display purposes
+    "meta" : {
+        "label" : "Draw bounding boxes (CPU) yolo",
+        "description" : "This recipe draws bounding boxes around the detect objects in the image. It helps to visualize how your model is doing.",
+        "icon" : "icon-picture"
+    },
+
+    "kind" : "PYTHON",
+
+
+    // Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
+    // or more dataset to each input and output role.
+
+    // The "arity" field indicates whether the user can associate several datasets to the role ('NARY')
+    // or at most one ('UNARY'). The "required" field indicates whether the user is allowed to
+    // associate no dataset with the role.
+
+    "inputRoles" : [
+        {
+            "name": "images",
+            "label": "Folder containing the images to be drawn on",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+       },
+        {
+            "name": "bbox",
+            "label": "The associated bounding boxes",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true,
+            "acceptsManagedFolder": false
+        }
+    ],
+
+    "outputRoles" : [
+        {
+            "name": "output",
+            "label": "Folder containing the drawn images",
+            "arity": "UNARY",
+            "required": false,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        }
+    ],
+
+    "paramsTemplate" : "draw-recipe-template.html",
+    "paramsModule" : "detectionRecipe.draw",
+    "paramsPythonSetup": "recipes-helper.py"
+
+}

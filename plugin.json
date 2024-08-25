@@ -1,0 +1,18 @@
+{
+    "id": "object-detection-cpu-yolo",
+    "version": "0.1.7",
+    "meta": {
+        "label": "Object detection in images (CPU) yolo",
+        "description": "Detect objects in images using deep learning. \n⚠️ Starting with DSS version 10 this plugin is partially superseded by the native [object detection capabilities](https://doc.dataiku.com/dss/latest/machine-learning/computer-vision/index.html).",
+        "author": "Dataiku",
+        "icon": "icon-eye-open",
+        "licenseInfo": "Apache Software License",
+        "url": "https://www.dataiku.com/product/plugins/object-detection-cpu/",
+        "tags": [
+            "Image",
+            "Machine Learning",
+            "Deep Learning",
+            "Computer Vision"
+        ]
+    }
+}

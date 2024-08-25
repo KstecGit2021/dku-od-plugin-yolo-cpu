@@ -1,0 +1,233 @@
+<div ng-controller="retrainRecipeController" ng-show="finishedLoading">
+
+    <form class="dku-form-horizontal">
+
+        <h2 class="settings-section-title">Dataset with labels</h2>
+
+        <div class="control-group">
+            <label class="control-label">Label stored as object </label>
+            <div class="controls">
+                <input type="checkbox" ng-model="config.single_column_data">
+                <span class="help-inline">All labels per image are stored in a single column as serialized JSON</span>
+            </div>
+        </div>
+
+
+        <div class="control-group">
+            <label class="control-label">Image filename column</label>
+            <div class="controls">
+                <select dku-bs-select
+                        ng-model="config.col_filename"
+                        ng-options="c for c in labelColumns">
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Label column</label>
+            <div class="controls">
+                <select dku-bs-select
+                        ng-model="config.col_label"
+                        ng-options="c for c in labelColumns">
+                </select>
+                <span class="help-inline" ng-show="config.single_column_data">Each value contains a serialized JSON array of bounding boxes with labels</span>
+                <span class="help-inline" ng-show="!config.single_column_data">Each value contains one category as string</span>
+            </div>
+        </div>
+
+        <div class="control-group" ng-show="!config.single_column_data">
+            <label class="control-label">x1 column</label>
+            <div class="controls">
+                <select dku-bs-select
+                        ng-model="config.col_x1"
+                        ng-options="c for c in labelColumns">
+                </select>
+            </div>
+        </div>
+        <div class="control-group" ng-show="!config.single_column_data">
+            <label class="control-label">y1 column</label>
+            <div class="controls">
+                <select dku-bs-select
+                        ng-model="config.col_y1"
+                        ng-options="c for c in labelColumns">
+                </select>
+            </div>
+        </div>
+        <div class="control-group" ng-show="!config.single_column_data">
+            <label class="control-label">x2 column</label>
+            <div class="controls">
+                <select dku-bs-select
+                        ng-model="config.col_x2"
+                        ng-options="c for c in labelColumns">
+                </select>
+            </div>
+        </div>
+        <div class="control-group" ng-show="!config.single_column_data">
+            <label class="control-label">y2 column</label>
+            <div class="controls">
+                <select dku-bs-select
+                        ng-model="config.col_y2"
+                        ng-options="c for c in labelColumns">
+                </select>
+            </div>
+        </div>
+
+        <h2 class="settings-section-title">Configuration</h2>
+
+        <div class="control-group">
+            <label class="control-label">Freeze Backbone</label>
+            <div class="controls">
+                <input name=should_use_gpu type="checkbox" ng-model="config.freeze"/>
+                <span class="help-inline">Check to stop training the ResNet backbone.</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Minimum/maximum side size</label>
+            <div class="controls">
+                <input style="width: 98px;" type="number" min="28" step="1" ng-model="config.min_side" required>
+                <input style="width: 98px; margin-left: 8px;" type="number" min="28" step="1" ng-model="config.max_side" required/>
+                <span class="help-inline">If a image side is outside this size range, the image will be resized.</span>
+            </div>
+        </div>
+
+
+        <div class="control-group">
+          <label class="control-label">Optimizer</label>
+          <div class="controls">
+            <select dku-bs-select
+                    ng-model="config.optimizer"
+                    ng-options="o[1] as o[0] for o in optimizerOptions">
+            </select>
+          </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Learning rate</label>
+            <div class="controls">
+                <input type="number" min="0" step="0.00001" ng-model="config.lr" required />
+            </div>
+
+        <h2 class="settings-section-title">Training</h2>
+
+        <div class="control-group">
+            <label class="control-label">Train/Val ratio</label>
+            <div class="controls">
+                <input type="number" min="0" max="1" step="0.1" ng-model="config.val_split" required />
+                <span class="help-inline">Proportion of the sample that goes to the train set. The rest goes to the validation set.</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Number of epochs</label>
+            <div class="controls">
+                <input type="number" min="1" step="1" ng-model="config.epochs"  required />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Reduce LR on plateau</label>
+            <div class="controls">
+                <input type="checkbox" ng-model="config.reducelr" />
+                <span class="help-inline">Check to reduce the learning rate when the validation loss is on a plateau.</span>
+            </div>
+        </div>
+
+        <div ng-show="config.reducelr">
+            <div class="control-group">
+                <label class="control-label">Patience</label>
+                <div class="controls">
+                    <input type="number" min="0" step="1" ng-model="config.reducelr_patience"  placeholder="patience" required />
+                    <span class="help-inline">Number of epochs between two learning rate reduction.</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Factor</label>
+                <div class="controls">
+                    <input type="number" min="0" step="0.1" ng-model="config.reducelr_factor"  placeholder="factor" required />
+                    <span class="help-inline">Factor of learning rate reduction.</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="settings-section-title">Data Augmentation</h2>
+
+        <div class="control-group">
+            <label class="control-label">Flip probability for X/Y</label>
+            <div class="controls">
+                <input type="number" min="0" max="1" step="0.1"  ng-model="config.flip_x"  required />
+                <input type="number" min="0" max="1" step="0.1"  ng-model="config.flip_y"  required />
+                <span class="help-inline">A probability between 0 and 1.</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Minimum/maximum rotation</label>
+            <div class="controls">
+                <input type="number" max="0" step="0.1"  ng-model="config.min_rotation"  required />
+                <input type="number" min="0" step="0.1"  ng-model="config.max_rotation"  required />
+                <span class="help-inline">An angle in radians.</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Minimum/maximum translation</label>
+            <div class="controls">
+                <input type="number" max="0" step="0.1"  ng-model="config.min_trans"  required />
+                <input type="number" min="0" step="0.1"  ng-model="config.max_trans"  required />
+                <span class="help-inline">A percentage of the image size.</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Minimum/maximum shear</label>
+            <div class="controls">
+                <input type="number" max="0" step="0.1"  ng-model="config.min_shear"  required />
+                <input type="number" min="0" step="0.1"  ng-model="config.max_shear"  required />
+                <span class="help-inline">An angle in radians.</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Minimum/maximum scaling</label>
+            <div class="controls">
+                <input type="number" min="0" step="0.1"  ng-model="config.min_scaling"  required />
+                <input type="number" min="0" step="0.1"  ng-model="config.max_scaling"  required />
+                <span class="help-inline">A percentage of the image size</span>
+            </div>
+        </div>
+
+        <div ng-show="canUseGPU">
+
+            <h2 class="settings-section-title">GPU</h2>
+
+            <div class="control-group">
+              <label class="control-label">Use GPU</label>
+              <div class="controls">
+                <input name=should_use_gpu type="checkbox" ng-model="config.should_use_gpu"/>
+              </div>
+            </div>
+
+            <div ng-show="config.should_use_gpu">
+                <div class="control-group">
+                  <label class="control-label">List of GPUs to use</label>
+                  <div class="controls">
+                    <input name=list_gpu style="width: 50px" type="text" ng-model="config.list_gpu" required />
+                    <span class="help-inline">Comma separated list of GPU indexes</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">Memory allocation rate per GPU</label>
+                  <div class="controls">
+                    <input name=gpu_allocation style="width: 50px" type="number" min=0 max=1 step="0.1" ng-model="config.gpu_allocation" required />
+                  </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </form>
+</div>
