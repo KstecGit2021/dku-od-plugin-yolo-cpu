@@ -1,37 +1,38 @@
-/* This file is the descriptor for the python runnable sentiment-api */
+/* 이 파일은 파이썬으로 실행 가능한 감정 분석 API의 설명서입니다. */
 {
-    /* Meta data for display purposes */
+    /* 디스플레이 용 메타 데이터 */
     "meta": {
-        "label": "Object detection endpoint (CPU) yolo",
-        "description": "Add an api endpoint for an object detection yolo model trained with the deeplearning-detection plugin",
+        "label": "객체 탐지 엔드포인트 (CPU) YOLO",
+        "description": "딥러닝-탐지 플러그인으로 학습된 YOLO 모델의 객체 탐지 API 엔드포인트를 추가합니다.",
         "icon": "icon-puzzle-piece"
     },
 
-    /* whether the runnable's code is untrusted */
+    /* 실행 가능한 코드가 신뢰할 수 없는지 여부 */
     "impersonate": false,
 
-    /* list of required permissions on the project to see/run the runnable */
+    /* 실행 가능한 코드를 보기/실행하기 위해 프로젝트에서 필요한 권한 목록 */
     "permissions": ["WRITE_CONF"],
 
-    /* what the code's run() returns:
-       - NONE : no result
-       - HTML : a string that is a html (utf8 encoded)
-       - FOLDER_FILE : a (folderId, path) pair to a file in a folder of this project (json-encoded)
-       - FILE : raw data (as a python string) that will be stored in a temp file by DSS
-       - URL : a url
+    /* 코드의 run() 메소드가 반환하는 결과 유형:
+       - NONE : 결과 없음
+       - HTML : HTML 문자열 (UTF-8 인코딩)
+       - FOLDER_FILE : 프로젝트 폴더 내의 파일에 대한 (folderId, path) 쌍 (JSON 인코딩)
+       - FILE : DSS에 의해 임시 파일로 저장될 원시 데이터 (파이썬 문자열)
+       - URL : URL
      */
     "resultType": "HTML",
 
-    /* label to use when the runnable's result is not inlined in the UI (ex: for urls) */
-    "resultLabel": "API service",
+    /* 실행 가능한 코드의 결과가 UI에 인라인되지 않을 때 사용할 레이블 (예: URL의 경우) */
+    "resultLabel": "API 서비스",
 
-    /* Macro roles define where this macro will appear in DSS GUI. They are used to pre-fill a macro parameter with context.
+    /* 매크로 역할은 이 매크로가 DSS GUI에서 표시될 위치를 정의합니다. 
+       이들은 매크로 매개변수를 컨텍스트로 미리 채우는 데 사용됩니다.
 
-       Each role consists of:
-        - type: where the macro will be shown
-            * when selecting DSS object(s): DATASET, DATASETS, API_SERVICE, API_SERVICE_VERSION, BUNDLE, VISUAL_ANALYSIS, SAVED_MODEL, MANAGED_FOLDER
-            * in the global project list: PROJECT_MACROS
-        - targetParamsKey(s): name of the parameter(s) that will be filled with the selected object
+       각 역할은 다음으로 구성됩니다:
+        - type: 매크로가 표시될 위치
+            * DSS 객체 선택 시: DATASET, DATASETS, API_SERVICE, API_SERVICE_VERSION, BUNDLE, VISUAL_ANALYSIS, SAVED_MODEL, MANAGED_FOLDER
+            * 글로벌 프로젝트 목록에서: PROJECT_MACROS
+        - targetParamsKey(s): 선택된 객체로 채워질 매개변수 이름
     */
     "macroRoles": [
         {
@@ -40,73 +41,72 @@
         }
     ],
 
-    /* The field "params" holds a list of all the params
-       for wich the user will be prompted for values:
+    /* "params" 필드는 사용자가 값을 입력하라는 메시지가 표시되는 모든 매개변수를 포함합니다:
 
-       The available parameter types are:
+       사용 가능한 매개변수 유형은 다음과 같습니다:
        STRING, INT, DOUBLE, BOOLEAN, PASSWORD, SELECT, MAP, TEXTAREA,
        DATASET, DATASETS, API_SERVICE, API_SERVICE_VERSION, BUNDLE, VISUAL_ANALYSIS, SAVED_MODEL, MANAGED_FOLDER
     */
-    
     "params": [
         {
             "name": "sep1",
-            "label": "Model folder",
+            "label": "모델 폴더",
             "type": "SEPARATOR"
         },
         {
             "name": "model_folder_id",
             "type": "MANAGED_FOLDER",
-            "label": "Folder name",
-            "description": "Name of the object detection yolo model folder"
+            "label": "폴더 이름",
+            "description": "객체 탐지 YOLO 모델이 저장된 폴더의 이름"
         },
         {
             "name": "sep2",
-            "label": "API service",
+            "label": "API 서비스",
             "type": "SEPARATOR"
         },
         {
             "name": "create_new_service",
             "type": "BOOLEAN",
-            "label": "Create new API service",
+            "label": "새 API 서비스 생성",
             "mandatory": true,
-            "defaultValue": false
+            "defaultValue": false,
+            "description": "새로운 API 서비스를 생성할지 여부를 결정합니다."
         },
         {
             "name": "service_id_new",
             "type": "STRING",
-            "label": "API service ID",
+            "label": "API 서비스 ID",
             "visibilityCondition" : "model.create_new_service",
-            "mandatory": true
+            "mandatory": true,
+            "description": "새로 생성할 API 서비스의 ID를 입력합니다."
         },
         {
             "name": "service_id_existing",
             "type": "API_SERVICE",
-            "label": "API service ID",
+            "label": "API 서비스 ID",
             "visibilityCondition" : "!model.create_new_service",
-            "mandatory": true
+            "mandatory": true,
+            "description": "기존의 API 서비스 중에서 선택합니다."
         },
         {
             "name": "endpoint_id",
             "type": "STRING",
-            "label": "Endpoint unique ID",
-            "mandatory": true
+            "label": "엔드포인트 고유 ID",
+            "mandatory": true,
+            "description": "이 API 엔드포인트의 고유한 식별자를 입력합니다."
         },
         {
             "name": "sep4",
-            "label": "Params model results",
+            "label": "모델 결과 매개변수",
             "type": "SEPARATOR"
         },
         {
             "name": "confidence",
             "type": "DOUBLE",
-            "label": "Confidence",
-            "description": "The minimum accepted model confidence in its prediction",
+            "label": "신뢰도",
+            "description": "모델의 예측에서 허용되는 최소 신뢰도",
             "defaultValue": 0.5,
             "mandatory": true
         }
-        
-        
-        
     ]
 }
