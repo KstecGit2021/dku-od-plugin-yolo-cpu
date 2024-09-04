@@ -2,17 +2,17 @@
     "id": "object-detection-cpu-yolo",
     "version": "0.1.7",
     "meta": {
-        "label": "Object detection in images (CPU) yolo",
-        "description": "Detect objects in images using deep learning. \n⚠️ Starting with DSS version 10 this plugin is partially superseded by the native [object detection capabilities](https://doc.dataiku.com/dss/latest/machine-learning/computer-vision/index.html).",
+        "label": "이미지에서 객체 탐지 (CPU) yolo",
+        "description": "딥 러닝을 사용하여 이미지에서 객체를 탐지합니다. \n⚠️ DSS 버전 10부터 이 플러그인은 일부 기능이 [기본 제공 객체 탐지 기능](https://doc.dataiku.com/dss/latest/machine-learning/computer-vision/index.html)에 의해 대체되었습니다.",
         "author": "Dataiku",
         "icon": "icon-eye-open",
-        "licenseInfo": "Apache Software License",
+        "licenseInfo": "Apache 소프트웨어 라이센스",
         "url": "https://www.dataiku.com/product/plugins/object-detection-cpu/",
         "tags": [
-            "Image",
-            "Machine Learning",
-            "Deep Learning",
-            "Computer Vision"
+            "이미지",
+            "기계 학습",
+            "딥 러닝",
+            "컴퓨터 비전"
         ]
     }
 }
