@@ -1,60 +1,59 @@
-/* This file is the descriptor for the python runnable transferme_Download pre-trained models */
+/* 이 파일은 Python 실행 가능한 'transferme_Download'의 설명서로, 사전 학습된 모델을 다운로드합니다. */
 {
-    /* Meta data for display purposes */
+    /* 디스플레이 용 메타 데이터 */
     "meta" : {
-        "label" : "Download pre-trained detection model (CPU) yolo",
-        "description" : "Use this macro to download model weights to your project.",
+        "label" : "사전 학습된 객체 탐지 모델 다운로드 (CPU) YOLO",
+        "description" : "이 매크로를 사용하여 모델 가중치를 프로젝트에 다운로드합니다.",
         "icon" : "icon-cloud-download"
     },
 
-    /* whether the runnable's code is untrusted */
+    /* 실행 가능한 코드가 신뢰할 수 없는지 여부 */
     "impersonate" : false,
     
-    /* list of required permissions on the project to see/run the runnable */
+    /* 실행 가능한 코드를 보기/실행하기 위해 프로젝트에서 필요한 권한 목록 */
     "permissions" : ["WRITE_CONF"],
 
-    /* what the code's run() returns:
-       - NONE : no result
-       - HTML : a string that is a html (utf8 encoded)
-       - FOLDER_FILE : a (folderId, path) pair to a file in a folder of this project (json-encoded)
-       - FILE : raw data (as a python string) that will be stored in a temp file by DSS
-       - URL : a url
+    /* 코드의 run() 메소드가 반환하는 결과 유형:
+       - NONE : 결과 없음
+       - HTML : HTML 문자열 (UTF-8 인코딩)
+       - FOLDER_FILE : 프로젝트 폴더 내의 파일에 대한 (folderId, path) 쌍 (JSON 인코딩)
+       - FILE : DSS에 의해 임시 파일로 저장될 원시 데이터 (파이썬 문자열)
+       - URL : URL
      */    
     "resultType" : "HTML",
     
-    /* label to use when the runnable's result is not inlined in the UI (ex: for urls) */
-    "resultLabel" : "model download output",
+    /* 실행 가능한 코드의 결과가 UI에 인라인되지 않을 때 사용할 레이블 (예: URL의 경우) */
+    "resultLabel" : "모델 다운로드 결과",
     
-    /* for FILE resultType, the extension to use for the temp file */
+    /* FILE resultType의 경우, 임시 파일에 사용할 확장자 */
 /*    "extension" : "txt",*/
     
-    /* for FILE resultType, the type of data stored in the temp file */
+    /* FILE resultType의 경우, 임시 파일에 저장된 데이터의 MIME 타입 */
 /*    "mimeType" : "text/plain",*/
 
-    /* The field "params" holds a list of all the params
-       for wich the user will be prompted for values:
+    /* "params" 필드는 사용자가 값을 입력하라는 메시지가 표시되는 모든 매개변수를 포함합니다:
 
-       The available parameter types are:
+       사용 가능한 매개변수 유형은 다음과 같습니다:
        STRING, INT, DOUBLE, BOOLEAN, PASSWORD, SELECT, MAP, TEXTAREA
     */
     
     "params": [
         {
             "name": "folder_name",
-            "label" : "Output folder name",
+            "label" : "출력 폴더 이름",
             "type": "STRING",
-            "description":"Use a different folder for each downloaded model.",
+            "description":"각 다운로드된 모델에 대해 다른 폴더를 사용하세요.",
             "mandatory" : true
         },
         
-        /* A "SELECT" parameter is a multi-choice selector. Choices are specified using the selectChoice field*/
+        /* "SELECT" 매개변수는 다중 선택 선택기를 의미합니다. 선택지는 selectChoices 필드를 사용하여 지정합니다. */
         {
             "name": "model",
-            "label": "Pre-trained detection yolo model to download",
+            "label": "다운로드할 사전 학습된 YOLO 모델",
             "type": "SELECT",
             "selectChoices": [
                 {
-                    "label": "RetinaNet trained on COCO",
+                    "label": "COCO에서 학습된 RetinaNet",
                     "value": "retinanet_coco"
                 }
             ],
