@@ -1,53 +1,58 @@
-// This file is the descriptor for the Custom code recipe create_patches
+// 이 파일은 Custom code recipe인 create_patches의 설명서입니다.
 {
-    // Meta data for display purposes
-    "meta" : {
-        "label" : "Detect objects in images (CPU) yolo",
-        "description" : "This recipe detects objects in images stored in a folder. It will create a dataset containing the locations of all found objects.",
-        "icon" : "icon-search"
+    // 디스플레이 목적의 메타데이터
+    "meta": {
+        "label": "Detect objects in images (CPU) yolo", // 레시피의 이름
+        "description": "This recipe detects objects in images stored in a folder. It will create a dataset containing the locations of all found objects.", 
+        // 레시피의 설명: 이 레시피는 폴더에 저장된 이미지에서 객체를 탐지하며, 탐지된 객체의 위치를 포함하는 데이터셋을 생성합니다.
+        "icon": "icon-search" // 레시피에 사용할 아이콘
     },
 
-    "kind" : "PYTHON",
+    // 레시피의 종류를 PYTHON으로 설정 (Python 코드 기반 레시피)
+    "kind": "PYTHON",
 
+    // 입력 및 출력은 역할(Role)에 의해 정의됩니다. 레시피의 I/O 탭에서 사용자는 각 입력 및 출력 역할에 하나 이상의 데이터셋을 연결할 수 있습니다.
 
-    // Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
-    // or more dataset to each input and output role.
+    // "arity" 필드는 사용자가 역할에 여러 데이터셋을 연결할 수 있는지('NARY') 아니면 최대 하나만 연결할 수 있는지('UNARY')를 나타냅니다.
+    // "required" 필드는 사용자가 역할에 데이터셋을 연결하지 않아도 되는지 여부를 나타냅니다.
 
-    // The "arity" field indicates whether the user can associate several datasets to the role ('NARY')
-    // or at most one ('UNARY'). The "required" field indicates whether the user is allowed to
-    // associate no dataset with the role.
-
-    "inputRoles" : [
+    "inputRoles": [
         {
-            "name": "images",
-            "label": "Folder containing the images",
-            "arity": "UNARY",
-            "required": true,
-            "acceptsDataset": false,
-            "acceptsManagedFolder": true
+            "name": "images", // 입력 역할의 이름
+            "label": "Folder containing the images", // 입력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": false, // 데이터셋을 입력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 입력으로 허용
         },
         {
-            "name": "weights",
-            "label": "Model's Weights",
-            "arity": "UNARY",
-            "required": true,
-            "acceptsDataset": false,
-            "acceptsManagedFolder": true
+            "name": "weights", // 입력 역할의 이름
+            "label": "Model's Weights", // 입력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": false, // 데이터셋을 입력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 입력으로 허용
         }
     ],
 
-    "outputRoles" : [
+    "outputRoles": [
         {
-            "name": "bboxes",
-            "label": "Output dataset",
-            "description": "Dataset where the objects detected in images will be stored.",
-            "arity": "UNARY",
-            "required": true,
-            "acceptsDataset": true
+            "name": "bboxes", // 출력 역할의 이름
+            "label": "Output dataset", // 출력 역할의 레이블
+            "description": "Dataset where the objects detected in images will be stored.", 
+            // 출력 역할의 설명: 이미지에서 탐지된 객체가 저장될 데이터셋입니다.
+            "arity": "UNARY", // 이 역할에는 하나의 데이터셋만 연결할 수 있음
+            "required": true, // 이 역할은 필수 출력임
+            "acceptsDataset": true // 데이터셋을 출력으로 허용
         }
     ],
 
-    "paramsTemplate" : "detect-recipe-template.html",
-    "paramsModule" : "detectionRecipe.detect",
+    // 레시피에서 사용할 HTML 파라미터 템플릿 파일을 지정
+    "paramsTemplate": "detect-recipe-template.html",
+
+    // 레시피에서 사용할 파라미터 모듈을 지정
+    "paramsModule": "detectionRecipe.detect",
+
+    // 레시피 실행 전에 호출될 Python 설정 파일을 지정
     "paramsPythonSetup": "recipes-helper.py"
 }

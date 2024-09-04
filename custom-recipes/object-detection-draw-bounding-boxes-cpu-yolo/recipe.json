@@ -1,54 +1,57 @@
-// This file is the descriptor for the Custom code recipe detect_cars
+// 이 파일은 Custom code recipe인 detect_cars의 설명서입니다.
 {
-    // Meta data for display purposes
-    "meta" : {
-        "label" : "Draw bounding boxes (CPU) yolo",
-        "description" : "This recipe draws bounding boxes around the detect objects in the image. It helps to visualize how your model is doing.",
-        "icon" : "icon-picture"
+    // 디스플레이 목적의 메타데이터
+    "meta": {
+        "label": "Draw bounding boxes (CPU) yolo", // 레시피의 이름
+        "description": "This recipe draws bounding boxes around the detect objects in the image. It helps to visualize how your model is doing.",
+        // 레시피의 설명: 이 레시피는 이미지에서 탐지된 객체 주위에 경계 상자를 그리며, 모델의 성능을 시각화하는 데 도움을 줍니다.
+        "icon": "icon-picture" // 레시피에 사용할 아이콘
     },
 
-    "kind" : "PYTHON",
+    // 레시피의 종류를 PYTHON으로 설정 (Python 코드 기반 레시피)
+    "kind": "PYTHON",
 
+    // 입력 및 출력은 역할(Role)에 의해 정의됩니다. 레시피의 I/O 탭에서 사용자는 각 입력 및 출력 역할에 하나 이상의 데이터셋을 연결할 수 있습니다.
 
-    // Inputs and outputs are defined by roles. In the recipe's I/O tab, the user can associate one
-    // or more dataset to each input and output role.
+    // "arity" 필드는 사용자가 역할에 여러 데이터셋을 연결할 수 있는지('NARY') 아니면 최대 하나만 연결할 수 있는지('UNARY')를 나타냅니다.
+    // "required" 필드는 사용자가 역할에 데이터셋을 연결하지 않아도 되는지 여부를 나타냅니다.
 
-    // The "arity" field indicates whether the user can associate several datasets to the role ('NARY')
-    // or at most one ('UNARY'). The "required" field indicates whether the user is allowed to
-    // associate no dataset with the role.
-
-    "inputRoles" : [
+    "inputRoles": [
         {
-            "name": "images",
-            "label": "Folder containing the images to be drawn on",
-            "arity": "UNARY",
-            "required": true,
-            "acceptsDataset": false,
-            "acceptsManagedFolder": true
-       },
+            "name": "images", // 입력 역할의 이름
+            "label": "Folder containing the images to be drawn on", // 입력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": false, // 데이터셋을 입력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 입력으로 허용
+        },
         {
-            "name": "bbox",
-            "label": "The associated bounding boxes",
-            "arity": "UNARY",
-            "required": true,
-            "acceptsDataset": true,
-            "acceptsManagedFolder": false
+            "name": "bbox", // 입력 역할의 이름
+            "label": "The associated bounding boxes", // 입력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 데이터셋만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": true, // 데이터셋을 입력으로 허용
+            "acceptsManagedFolder": false // 관리 폴더를 입력으로 허용하지 않음
         }
     ],
 
-    "outputRoles" : [
+    "outputRoles": [
         {
-            "name": "output",
-            "label": "Folder containing the drawn images",
-            "arity": "UNARY",
-            "required": false,
-            "acceptsDataset": false,
-            "acceptsManagedFolder": true
+            "name": "output", // 출력 역할의 이름
+            "label": "Folder containing the drawn images", // 출력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": false, // 이 역할은 필수 출력이 아님
+            "acceptsDataset": false, // 데이터셋을 출력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 출력으로 허용
         }
     ],
 
-    "paramsTemplate" : "draw-recipe-template.html",
-    "paramsModule" : "detectionRecipe.draw",
+    // 레시피에서 사용할 HTML 파라미터 템플릿 파일을 지정
+    "paramsTemplate": "draw-recipe-template.html",
+
+    // 레시피에서 사용할 파라미터 모듈을 지정
+    "paramsModule": "detectionRecipe.draw",
+
+    // 레시피 실행 전에 호출될 Python 설정 파일을 지정
     "paramsPythonSetup": "recipes-helper.py"
-
 }
