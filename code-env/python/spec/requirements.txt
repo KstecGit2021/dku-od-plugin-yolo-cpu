@@ -1,12 +1,11 @@
-pandas>=1.1.4
+git+https://github.com/ultralytics/ultralytics.git
+#ultralytics
+keras
+skorch
+torch
+torchvision
 opencv-python
 Pillow
 scikit-learn
 boto3
 tensorflow
-keras
-skorch
-torch
-torchvision
-# git+https://github.com/ultralytics/ultralytics.git
-ultralytics
