@@ -7,6 +7,6 @@ keras
 skorch
 torch
 torchvision
-git+https://github.com/ultralytics/ultralytics.git
-#ultralytics
-#ultralytics.utils
+# git+https://github.com/ultralytics/ultralytics.git
+ultralytics
+ultralytics.utils
