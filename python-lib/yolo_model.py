@@ -21,7 +21,7 @@ import misc_utils
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
 
 def get_model(weights, num_classes, freeze=False, n_gpu=None):
-    """RetinaNet 모델을 반환하는 함수.
+    """Yolo 모델을 반환하는 함수.
 
     Args:
         weights: 초기 가중치 파일의 경로.
