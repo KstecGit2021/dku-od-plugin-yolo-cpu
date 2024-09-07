@@ -1,32 +1,31 @@
 #### python3.6 기준
-# keras==2.2.4
-# h5py==2.10.0
-# opencv-python==3.4.0.12
-# Pillow>=5.1
-# git+https://github.com/fizyr/keras-retinanet.git@0d89a33bace90591cad7882cf0b1cdbf0fbced43
-# pip==9.0.1
-# scikit-learn>=0.19
-# boto3>=1.7<1.8
-# tensorflow==1.4.0
-# torch==1.9.1+cu111
-# --find-links https://download.pytorch.org/whl/torch_stable.html
-# torchvision==0.10.1+cu111
-# git+https://github.com/ultralytics/ultralytics.git
-# torch==1.7.1  # Example version compatible with Python 3.6
-# torchvision==0.8.2  # Example version compatible with Python 3.6
-# yolov5
+keras==2.2.4
+h5py==2.10.0
+opencv-python==3.4.0.12
+Pillow>=5.1
+git+https://github.com/fizyr/keras-retinanet.git@0d89a33bace90591cad7882cf0b1cdbf0fbced43
+pip==9.0.1
+scikit-learn>=0.19
+boto3>=1.7<1.8
+tensorflow==1.4.0
+torch==1.9.1+cu111
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torchvision==0.10.1+cu111
+git+https://github.com/ultralytics/ultralytics.git
+torch==1.7.1  # Example version compatible with Python 3.6
+torchvision==0.8.2  # Example version compatible with Python 3.6
+yolov5
 
 #### python3.9 기준
-
-keras==2.11.0  # Update to the latest Keras version compatible with Python 3.9
-h5py==3.8.0    # Latest version compatible with Keras and Python 3.9
-opencv-python==4.7.0.72  # Latest stable version compatible with Python 3.9
-Pillow>=8.0.0  # Updated version of Pillow
-git+https://github.com/fizyr/keras-retinanet.git@0d89a33bace90591cad7882cf0b1cdbf0fbced43  # Specific commit version
-pip==22.1.2   # Updated version of pip
-scikit-learn>=1.0.2  # Latest stable version compatible with Python 3.9
-boto3>=1.21,<1.22  # Updated version of boto3
-tensorflow==2.11.0  # Latest stable version compatible with Python 3.9
-torch==1.12.0  
-torchvision==0.13.0
-git+https://github.com/ultralytics/ultralytics.git  # Latest YOLOv5 repository
+# keras==2.11.0  # Update to the latest Keras version compatible with Python 3.9
+# h5py==3.8.0    # Latest version compatible with Keras and Python 3.9
+# opencv-python==4.7.0.72  # Latest stable version compatible with Python 3.9
+# Pillow>=8.0.0  # Updated version of Pillow
+# git+https://github.com/fizyr/keras-retinanet.git@0d89a33bace90591cad7882cf0b1cdbf0fbced43  # Specific commit version
+# pip==22.1.2   # Updated version of pip
+# scikit-learn>=1.0.2  # Latest stable version compatible with Python 3.9
+# boto3>=1.21,<1.22  # Updated version of boto3
+# tensorflow==2.11.0  # Latest stable version compatible with Python 3.9
+# torch==1.13.0+cu116  # Latest stable version compatible with Python 3.9 (adjust for CUDA version if needed)
+# torchvision==0.14.0+cu116  # Latest stable version compatible with Python 3.9
+# git+https://github.com/ultralytics/ultralytics.git  # Latest YOLOv5 repository
