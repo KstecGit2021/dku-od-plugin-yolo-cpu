@@ -1,5 +1,6 @@
 {
   "acceptedPythonInterpreters": ["PYTHON39"],
+  "corePackagesSet": "PANDAS13",
   "installCorePackages": true,
   "installJupyterSupport": false,
   "conda": false
