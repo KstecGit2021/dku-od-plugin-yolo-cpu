@@ -137,6 +137,18 @@ train_results = model.train(
     epochs=int(configs['epochs']),
     batch_size=batch_size,
     device='cuda' if gpu_opts['should_use_gpu'] else 'cpu'
+    project=output_path,  # 결과를 저장할 디렉토리
+    name='yolov5_training'  # 학습 실행 이름
+)
+
+# 준비된 dataset.yaml을 사용해 모델 학습
+model.train(
+    data=yaml_file_path,  # dataset.yaml 파일 경로
+    epochs=1,  # 학습 에폭 수
+    imgsz=640,  # 이미지 크기
+    batch=1,  # 배치 크기
+    project=output_path,  # 결과를 저장할 디렉토리
+    name='yolov5_training'  # 학습 실행 이름
 )
 
 # 훈련된 모델을 저장합니다.
