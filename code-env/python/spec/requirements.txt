@@ -1,15 +1,13 @@
-keras==2.2.4
-h5py==2.10.0
-opencv-python==3.4.0.12
-Pillow>=5.1
-#git+https://github.com/fizyr/keras-retinanet.git@0d89a33bace90591cad7882cf0b1cdbf0fbced43
-pip==9.0.1
-scikit-learn>=0.19
-boto3>=1.7<1.8
-tensorflow==1.4.0
-torch==1.12.0
-#opencv-python==4.5.2.52
-torchvision==0.13.0
-git+https://github.com/ultralytics/ultralytics.git
+keras
+korch
+torch
+torchvision
+opencv-python
+Pillow
+scikit-learn
+boto3
+#tensorflow
+#torch==1.9.1+cu111
+#--find-links https://download.pytorch.org/whl/torch_stable.html
+#git+https://github.com/ultralytics/ultralytics.git
 #ultralytics
-#ultralytics.utils
