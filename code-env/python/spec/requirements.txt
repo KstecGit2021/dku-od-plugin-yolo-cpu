@@ -1,8 +1,12 @@
+opencv-python
+Pillow
+scikit-learn
+boto3
+tensorflow==2.2.0
+keras==2.2.0
 skorch
 torch
 torchvision
 git+https://github.com/ultralytics/ultralytics.git
 #ultralytics
 #ultralytics.utils
-tensorflow==2.11.0
-keras==2.11.0
