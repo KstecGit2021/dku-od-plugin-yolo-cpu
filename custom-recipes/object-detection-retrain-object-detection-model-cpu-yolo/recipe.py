@@ -90,19 +90,34 @@ train_df, val_df = misc_utils.split_dataset(bb_df, val_split=val_split)
 batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1
 
 # Create data generators
+#train_gen = DfGenerator(train_df, class_mapping, configs,
+#                        transform_generator=transformer,
+#                        base_dir=images_folder.get_path(),
+#                        image_min_side=min_side,
+#                        image_max_side=max_side,
+#                        batch_size=batch_size)
+#
+#val_gen = DfGenerator(val_df, class_mapping, configs,
+#                      transform_generator=transformer,
+#                      base_dir=images_folder.get_path(),
+#                      image_min_side=min_side,
+#                      image_max_side=max_side,
+#                      batch_size=batch_size)
+
 train_gen = DfGenerator(train_df, class_mapping, configs,
-                        transform_generator=transformer,
+                        transform_generator=rnd_gen,
                         base_dir=images_folder.get_path(),
                         image_min_side=min_side,
                         image_max_side=max_side,
                         batch_size=batch_size)
 
 val_gen = DfGenerator(val_df, class_mapping, configs,
-                      transform_generator=transformer,
+                      transform_generator=None,
                       base_dir=images_folder.get_path(),
                       image_min_side=min_side,
                       image_max_side=max_side,
                       batch_size=batch_size)
+
 
 if len(val_gen) == 0:
     val_gen = None
