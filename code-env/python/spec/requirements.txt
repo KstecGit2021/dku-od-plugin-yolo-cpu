@@ -22,3 +22,4 @@ git+https://github.com/ultralytics/ultralytics.git
 #ultralytics
 #ultralytics.utils
 tensorflow
+keras
