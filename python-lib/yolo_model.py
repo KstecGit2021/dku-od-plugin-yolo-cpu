@@ -11,7 +11,7 @@ import misc_utils
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
 
-def get_model(weights, num_classes):
+def get_model(weights, num_classes, freeze=False, n_gpu=None):
     """YOLOv5 모델을 반환하는 함수.
 
     Args:
