@@ -11,3 +11,4 @@ tensorflow==2.11.0  # Latest stable version compatible with Python 3.9
 #--find-links https://download.pytorch.org/whl/torch_stable.html
 #git+https://github.com/ultralytics/ultralytics.git
 #ultralytics
+ 
