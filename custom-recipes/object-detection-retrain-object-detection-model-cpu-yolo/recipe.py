@@ -134,8 +134,9 @@ logging.info('Nb val images: {:11}'.format(len(val_gen.image_names)))
 
 # Train the model
 model.train(
-    train_loader=train_gen, 
-    val_loader=val_gen,
+#    train_loader=train_gen, 
+#    val_loader=val_gen,
+    data=yaml_file_path,  # dataset.yaml 파일 경로   
     epochs=int(configs['epochs']),
     batch_size=batch_size,
     device='cuda' if gpu_opts['should_use_gpu'] else 'cpu',
