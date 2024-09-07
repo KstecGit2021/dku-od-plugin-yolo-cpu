@@ -16,6 +16,7 @@ tensorflow==1.4.0
 #torchvision==0.8.2  # Example version compatible with Python 3.6
 #yolov5
 
+
 #### python3.9 기준
 # keras==2.11.0  # Update to the latest Keras version compatible with Python 3.9
 # h5py==3.8.0    # Latest version compatible with Keras and Python 3.9
