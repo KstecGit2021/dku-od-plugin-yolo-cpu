@@ -137,7 +137,7 @@ model.train(
     val_loader=val_gen,
     epochs=int(configs['epochs']),
     batch_size=batch_size,
-    device='cuda' if gpu_opts['should_use_gpu'] else 'cpu'
+    device='cuda' if gpu_opts['should_use_gpu'] else 'cpu',
     project=output_path,  # 결과를 저장할 디렉토리
     name='yolov5_training'  # 학습 실행 이름
 )
