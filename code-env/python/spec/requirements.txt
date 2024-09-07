@@ -1,3 +1,4 @@
+cython
 keras==2.11.0  # Latest version compatible with Python 3.9 and TensorFlow 2.x
 h5py==3.8.0    # Latest version compatible with newer Keras
 opencv-python==4.7.0.72  # Latest stable version compatible with Python 3.9
