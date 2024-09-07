@@ -24,7 +24,6 @@ import torch  # PyTorch library (YOLOv5 uses PyTorch)import warnings  # Module f
 
 
 
-
 # 로깅 설정: 로그 레벨을 INFO로 설정하고, 로그 메시지 형식을 지정합니다.
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
 
