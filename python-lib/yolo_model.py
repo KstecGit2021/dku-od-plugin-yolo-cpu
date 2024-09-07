@@ -1,14 +1,9 @@
 import logging
 import os
-import numpy as np
-import cv2
 import torch
-import torchvision.transforms as T
-from models.yolo import Model  # 가정: YOLOv5 모델이 `models.yolo`에 정의되어 있습니다.
+from yolov5 import YOLOv5
 
-import misc_utils
-
-# 로깅 설정
+# 로깅 설정: 로그 레벨을 INFO로 설정하고, 로그 메시지 형식을 지정합니다.
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
 
 def get_model(weights, num_classes, freeze=False, n_gpu=None):
@@ -17,16 +12,27 @@ def get_model(weights, num_classes, freeze=False, n_gpu=None):
     Args:
         weights: 초기 가중치 파일의 경로.
         num_classes: 탐지할 클래스의 수.
+        freeze: YOLOv5의 경우, 일반적으로 freeze 설정은 필요하지 않습니다.
+        n_gpu: 사용할 GPU의 수, 1보다 크면 멀티 GPU 모델로 설정.
 
     Returns:
-        모델 객체.
+        모델 저장용 모델과 훈련용 모델.
     """
-    # YOLOv5 모델 로드
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path=weights)
+    # GPU 사용 여부를 확인하고, 가능한 경우 멀티 GPU 설정을 합니다.
+    device = 'cuda' if torch.cuda.is_available() and (n_gpu is not None and n_gpu > 0) else 'cpu'
+    logging.info(f'사용할 디바이스: {device}')
+
+    # YOLOv5 모델을 로드합니다. YOLOv5는 일반적으로 사전 훈련된 가중치를 사용합니다.
+    model = YOLOv5.load(weights, device=device)
     
-    # 클래스 수 설정
-    model.names = [f'class_{i}' for i in range(num_classes)]
-    return model
+    # YOLOv5 모델의 클래스 수를 설정합니다. YOLOv5의 경우, 가중치 파일에 클래스 수가 포함되어 있을 수 있지만,
+    # 사용자 정의 클래스 수를 설정할 수 있습니다.
+    model.model.nc = num_classes
+    
+    logging.info('YOLOv5 모델이 성공적으로 로딩되었습니다.')
+
+    return model, model
+
 
 def get_test_model(weights, num_classes):
     """추론용 YOLOv5 모델을 반환하는 함수.
