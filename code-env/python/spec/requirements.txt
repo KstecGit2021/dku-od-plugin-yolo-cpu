@@ -7,3 +7,5 @@ pip==9.0.1
 scikit-learn>=0.19
 boto3>=1.7<1.8
 tensorflow==1.4.0
+torch==1.9.1+cu111
+--find-links https://download.pytorch.org/whl/torch_stable.html
