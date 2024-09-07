@@ -1,11 +1,11 @@
-keras
-korch
-torch
-torchvision
-opencv-python
-Pillow
-scikit-learn
-boto3
+keras==2.11.0  # Latest version compatible with Python 3.9 and TensorFlow 2.x
+h5py==3.8.0    # Latest version compatible with newer Keras
+opencv-python==4.7.0.72  # Latest stable version compatible with Python 3.9
+Pillow>=8.0.0  # Updated version of Pillow for compatibility with Python 3.9
+pip==22.1.2    # Latest version of pip compatible with Python 3.9
+scikit-learn>=1.0.2  # Latest stable version compatible with Python 3.9
+boto3>=1.21,<1.22  # Updated version of boto3 for compatibility with Python 3.9
+tensorflow==2.11.0  # Latest stable version compatible with Python 3.9
 #tensorflow
 #torch==1.9.1+cu111
 #--find-links https://download.pytorch.org/whl/torch_stable.html
