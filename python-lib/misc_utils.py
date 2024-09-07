@@ -172,4 +172,4 @@ def draw_caption(image, box, caption):
     b = np.array(box).astype(int)
     # 캡션을 박스 내부에 흑백으로 씀
     cv2.putText(image, caption, (b[0] + 5, b[1] + 15), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 2)
-    cv2.putText(image, caption, (b[0] + 5, b[1] + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 
+    cv2.putText(image, caption, (b[0] + 5, b[1] + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 1)
