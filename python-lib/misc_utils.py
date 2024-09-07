@@ -10,13 +10,6 @@ from tensorflow.keras import optimizers
 from tensorflow.keras import callbacks
 import tensorflow as tf
 import cv2
-import keras_retinanet
-from keras_retinanet.models.resnet import resnet50_retinanet
-from keras_retinanet.models.retinanet import retinanet_bbox
-from keras_retinanet.utils.model import freeze as freeze_model
-from keras_retinanet.utils.image import read_image_bgr, preprocess_image, resize_image
-from keras_retinanet.utils.visualization import draw_box
-from keras_retinanet.utils.colors import label_color
 
 # 로그 설정: 로그 메시지의 형식과 레벨을 설정합니다.
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
