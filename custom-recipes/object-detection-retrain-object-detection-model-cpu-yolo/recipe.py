@@ -115,7 +115,7 @@ model, train_model = yolo_model.get_model(weights, len(class_mapping),
                                                n_gpu=gpu_opts['n_gpu'])
 
 # 모델을 설정한 옵티마이저와 손실 함수로 컴파일
-retinanet_model.compile_model(train_model, configs)
+yolo_model.compile_model(train_model, configs)
 
 # 콜백 함수 목록을 설정
 cbs = misc_utils.get_callbacks()
