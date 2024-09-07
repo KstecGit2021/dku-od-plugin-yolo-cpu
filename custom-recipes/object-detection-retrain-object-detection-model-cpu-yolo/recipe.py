@@ -131,7 +131,8 @@ logging.info('Nb val images: {:11}'.format(len(val_gen.image_names)))
 
 # 모델 훈련을 시작합니다.
 # YOLOv5는 Keras의 fit_generator와는 다른 훈련 루프를 사용합니다; 다음 코드는 가상의 train 메서드를 가정합니다.
-train_results = model.train(
+#train_results = model.train(
+model.train(
     train_loader=train_gen, 
     val_loader=val_gen,
     epochs=int(configs['epochs']),
@@ -141,15 +142,6 @@ train_results = model.train(
     name='yolov5_training'  # 학습 실행 이름
 )
 
-# 준비된 dataset.yaml을 사용해 모델 학습
-model.train(
-    data=yaml_file_path,  # dataset.yaml 파일 경로
-    epochs=1,  # 학습 에폭 수
-    imgsz=640,  # 이미지 크기
-    batch=1,  # 배치 크기
-    project=output_path,  # 결과를 저장할 디렉토리
-    name='yolov5_training'  # 학습 실행 이름
-)
 
 # 훈련된 모델을 저장합니다.
-torch.save(model.state_dict(), output_path)
+#torch.save(model.state_dict(), output_path)
