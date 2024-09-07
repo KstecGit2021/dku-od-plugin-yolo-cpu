@@ -41,8 +41,8 @@ def get_model(weights, num_classes, freeze=False, n_gpu=None):
         with tf.device('/cpu:0'):  # 모델 로딩을 CPU에서 수행
 #            model = resnet50_retinanet(num_classes=num_classes, modifier=modifier)
             model = YOLO('yolov5s.pt')  # 사전 학습된 YOLOv5 작은 모델 로드
-            model = YOLO(num_classes=num_classes, modifier=modifier)
-            model.load_weights(weights, by_name=True, skip_mismatch=True)  # 가중치 로딩
+#            model = YOLO(num_classes=num_classes, modifier=modifier)
+#            model.load_weights(weights, by_name=True, skip_mismatch=True)  # 가중치 로딩
 
         multi_model = multi_gpu_model(model, gpus=n_gpu)  # 멀티 GPU 모델 설정
         return model, multi_model
