@@ -5,7 +5,8 @@ import numpy as np
 # from keras_retinanet.preprocessing.csv_generator import CSVGenerator, Generator
 
 
-class DfGenerator(CSVGenerator):
+#class DfGenerator(CSVGenerator):
+class DfGenerator():
     """메모리에 있는 Pandas 데이터프레임과 함께 작동하도록 설계된 커스텀 제너레이터."""
 
     def __init__(self, df_data, class_mapping, cols, base_dir='', **kwargs):
