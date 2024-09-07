@@ -14,7 +14,8 @@ from dataiku import pandasutils as pdu  # Dataiku pandas utilities
 from dataiku.customrecipe import *  # Dataiku recipe API
 from dfgenerator import DfGenerator  # Custom DataFrame generator
 from json import JSONDecodeError  # JSON decode error
-from yolov5 import YOLOv5  # YOLOv5 for object detection
+#from yolov5 import YOLOv5  # YOLOv5 for object detection
+from ultralytics import YOLO  # Updated import statement
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
