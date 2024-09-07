@@ -11,7 +11,7 @@ import pandas as pd  # 데이터 처리 및 분석을 위한 라이브러리
 import retinanet_model  # RetinaNet 모델을 다루기 위한 모듈
 from dataiku import pandasutils as pdu  # 데이터이쿠에서 제공하는 판다스 유틸리티 함수들
 from dataiku.customrecipe import *  # 데이터이쿠의 레시피 API 사용을 위한 모듈
-from dfgenerator import DfGenerator  # 데이터프레임을 생성하는 제너레이터 모듈
+#from dfgenerator import DfGenerator  # 데이터프레임을 생성하는 제너레이터 모듈
 from keras import callbacks  # 케라스 콜백 함수 모듈
 from keras import optimizers  # 케라스 최적화 함수 모듈
 from json import JSONDecodeError  # JSON 디코딩 오류 처리를 위한 예외 클래스
