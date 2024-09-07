@@ -4,6 +4,6 @@
   ],
   "corePackagesSet": "AUTO",
   "forceConda": false,
-  "installCorePackages": true,
+  "installCorePackages": false,
   "installJupyterSupport": false
 }
