@@ -51,8 +51,9 @@ def get_model(weights, num_classes, freeze=False, n_gpu=None):
     else:
         logging.info('CPU 모드에서 모델 로딩 중. 느릴 수 있습니다. 가능한 경우 GPU 사용 권장.')
 
-#    model = resnet50_retinanet(num_classes=num_classes, modifier=modifier)
+#   model = resnet50_retinanet(num_classes=num_classes, modifier=modifier)
 #    model.load_weights(weights, by_name=True, skip_mismatch=True)
+    model = YOLO('yolov5s.pt')  # 사전 학습된 YOLOv5 작은 모델 로드
 
     return model, model
 
