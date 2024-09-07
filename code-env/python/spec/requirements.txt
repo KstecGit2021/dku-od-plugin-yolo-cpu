@@ -16,7 +16,7 @@ mxnet>=1.8.0.post0,<1.10
 skorch>=0.11.0,<0.12.0
 torch==1.9.1+cu111
 --find-links https://download.pytorch.org/whl/torch_stable.html
-git+https://github.com/ultralytics/ultralytics.git
+#git+https://github.com/ultralytics/ultralytics.git
 #ultralytics
 #keras
 #skorch
