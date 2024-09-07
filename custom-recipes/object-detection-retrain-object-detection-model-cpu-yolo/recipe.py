@@ -105,7 +105,8 @@ batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1
 #                      batch_size=batch_size)
 
 train_gen = DfGenerator(train_df, class_mapping, configs,
-                        transform_generator=rnd_gen,
+#                        transform_generator=rnd_gen,
+                        transform_generator=transformer,
                         base_dir=images_folder.get_path(),
                         image_min_side=min_side,
                         image_max_side=max_side,
