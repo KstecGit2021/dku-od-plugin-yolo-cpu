@@ -2,8 +2,8 @@ opencv-python
 Pillow
 scikit-learn
 boto3
-tensorflow==2.2.0
-keras==2.2.0
+tensorflow
+keras
 skorch
 torch
 torchvision
