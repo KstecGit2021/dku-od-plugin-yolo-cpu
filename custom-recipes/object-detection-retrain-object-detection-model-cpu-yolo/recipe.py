@@ -147,7 +147,7 @@ model.train(
     epochs=1,  # 학습 에폭 수
     imgsz=640,  # 이미지 크기
     batch=1,  # 배치 크기
-    project=output_folder,  # 결과를 저장할 디렉토리
+    project=output_path,  # 결과를 저장할 디렉토리
     name='yolov5_training'  # 학습 실행 이름
 )
 
