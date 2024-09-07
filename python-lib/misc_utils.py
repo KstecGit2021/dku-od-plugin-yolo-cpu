@@ -6,10 +6,8 @@ import logging
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from keras import optimizers
-from keras import callbacks
-from keras.utils import multi_gpu_model
-from keras.models import load_model
+from tensorflow.keras import optimizers
+from tensorflow.keras import callbacks
 import tensorflow as tf
 import cv2
 import keras_retinanet
@@ -116,9 +114,11 @@ def compute_metrics(true_pos, false_pos, false_neg):
     precision = true_pos / (true_pos + false_pos)  # 정밀도 계산
     recall = true_pos / (true_pos + false_neg)  # 재현율 계산
 
-    if precision == 0 or recall == 0: return precision, recall, f1
+    if precision == 0 or recall == 0:
+        f1 = 0  # F1 점수 계산에서 정밀도나 재현율이 0이면 F1 점수도 0
+    else:
+        f1 = 2 / (1 / precision + 1 / recall)  # F1 점수 계산
 
-    f1 = 2 / (1/precision + 1/recall)  # F1 점수 계산
     return precision, recall, f1
 
 def draw_bboxes(src_path, dst_path, df, label_cap, confidence_cap, ids):
@@ -172,4 +172,4 @@ def draw_caption(image, box, caption):
     b = np.array(box).astype(int)
     # 캡션을 박스 내부에 흑백으로 씀
     cv2.putText(image, caption, (b[0] + 5, b[1] + 15), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 2)
-    cv2.putText(image, caption, (b[0] + 5, b[1] + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 1)
+    cv2.putText(image, caption, (b[0] + 5, b[1] + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 
