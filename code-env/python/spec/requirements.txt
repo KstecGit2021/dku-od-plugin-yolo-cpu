@@ -12,3 +12,4 @@ tensorflow==2.11.0  # Latest stable version compatible with Python 3.9
 #--find-links https://download.pytorch.org/whl/torch_stable.html
 git+https://github.com/ultralytics/ultralytics.git
 #ultralytics
+git+https://github.com/fizyr/keras-retinanet.git@0d89a33bace90591cad7882cf0b1cdbf0fbced43
