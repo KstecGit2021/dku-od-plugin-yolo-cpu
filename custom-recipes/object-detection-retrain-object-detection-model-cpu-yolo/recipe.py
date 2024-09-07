@@ -109,8 +109,8 @@ val_gen = DfGenerator(val_df, class_mapping, configs,
 # 검증 데이터가 없을 경우 None으로 설정
 if len(val_gen) == 0: val_gen = None
 
-# RetinaNet 모델을 생성하고 컴파일
-model, train_model = retinanet_model.get_model(weights, len(class_mapping),
+# yolo 모델을 생성하고 컴파일
+model, train_model = yolo_model.get_model(weights, len(class_mapping),
                                                freeze=configs['freeze'],
                                                n_gpu=gpu_opts['n_gpu'])
 
