@@ -2,7 +2,7 @@ import json
 from json import JSONDecodeError
 
 import numpy as np
-from keras_retinanet.preprocessing.csv_generator import CSVGenerator, Generator
+# from keras_retinanet.preprocessing.csv_generator import CSVGenerator, Generator
 
 
 class DfGenerator(CSVGenerator):
