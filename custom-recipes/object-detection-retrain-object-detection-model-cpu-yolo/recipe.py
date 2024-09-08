@@ -41,8 +41,16 @@ output_path = op.join(output_folder.get_path(), 'weights.pt')
 # 레시피 구성을 로드합니다.
 configs = get_recipe_config()
 
+## GPU 옵션을 로드합니다. GPU 사용 여부, GPU 목록, GPU 할당량을 설정합니다.
+#gpu_opts = gpu_utils.load_gpu_options(configs.get('should_use_gpu', False),
+#                                      configs.get('list_gpu', ''), 
+#                                      configs.get('gpu_allocation', 0.))
+
+# 'should_use_gpu'가 configs에 존재하지 않을 경우 기본값 False를 사용하도록 설정
+should_use_gpu = configs.get('should_use_gpu', False)
+
 # GPU 옵션을 로드합니다. GPU 사용 여부, GPU 목록, GPU 할당량을 설정합니다.
-gpu_opts = gpu_utils.load_gpu_options(configs.get('should_use_gpu', False),
+gpu_opts = gpu_utils.load_gpu_options(should_use_gpu,
                                       configs.get('list_gpu', ''), 
                                       configs.get('gpu_allocation', 0.))
 
