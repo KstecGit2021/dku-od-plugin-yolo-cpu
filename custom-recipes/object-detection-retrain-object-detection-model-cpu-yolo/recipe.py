@@ -10,11 +10,14 @@ import os.path as op  # OS 경로 유틸리티 모듈
 import pandas as pd  # 데이터 처리 모듈
 import torch  # PyTorch 모듈
 import torchvision.transforms as transforms  # 이미지 변환 모듈
+import yaml  # YAML 처리 모듈
 from dataiku import pandasutils as pdu  # Dataiku pandas 유틸리티 모듈
 from dataiku.customrecipe import *  # Dataiku 레시피 API 모듈
 from dfgenerator import DfGenerator  # 사용자 정의 DataFrame 생성기
 from json import JSONDecodeError  # JSON 디코딩 에러 모듈
 from ultralytics import YOLO  # YOLOv5의 최신 업데이트 모듈
+import cv2  # OpenCV 모듈
+from pathlib import Path  # 파일 경로 처리 모듈
 
 # 로깅을 설정합니다. 로깅 레벨을 INFO로 설정하고, 로그 메시지 형식을 지정합니다.
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
@@ -91,30 +94,61 @@ train_df, val_df = misc_utils.split_dataset(bb_df, val_split=val_split)
 # GPU 사용에 따라 배치 크기를 설정합니다.
 batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1  # GPU를 사용할 경우 GPU의 수를 배치 크기로 설정합니다.
 
-# 데이터 생성기를 생성합니다.
-train_gen = DfGenerator(train_df, class_mapping, configs,
-                        base_dir=images_folder.get_path(),
-                        transform=transformer)  # 훈련 데이터에 대한 변환기 설정
+# YOLO 데이터셋 YAML 파일 생성
+yaml_data = {
+    'train': str(images_folder.get_path()),  # 이미지 폴더 경로
+    'val': str(images_folder.get_path()),  # 검증 이미지 폴더 경로
+    'nc': len(class_mapping),  # 클래스 수
+    'names': [inverse_cm[i] for i in range(len(inverse_cm))]  # 클래스 이름
+}
 
-val_gen = DfGenerator(val_df, class_mapping, configs,
-                      base_dir=images_folder.get_path(),
-                      transform=None)  # 검증 데이터에는 변환기를 사용하지 않습니다.
+yaml_file_path = op.join(output_folder.get_path(), 'dataset.yaml')
+with open(yaml_file_path, 'w') as f:
+    yaml.dump(yaml_data, f)  # YAML 파일로 저장
 
-# 검증 데이터 생성기가 비어있으면 None으로 설정합니다.
-if len(val_gen) == 0:
-    val_gen = None
+# YOLO 형식의 어노테이션 파일 생성
+labels_path = op.join(output_folder.get_path(), 'labels')
+os.makedirs(labels_path, exist_ok=True)  # 라벨 저장 경로 생성
 
-# 데이터셋을 YAML 파일로 변환합니다.
-yaml_data_path = op.join(output_folder.get_path(), 'data.yaml')
-misc_utils.create_yaml_for_data(yaml_data_path, train_df, val_df, min_side, max_side, class_mapping)
+for idx, row in bb_df.iterrows():
+    image_id = row['record_id']  # 이미지 ID 가져오기
+    annotations = json.loads(row[configs['col_label']])  # 라벨 정보 가져오기
+
+    # YOLO 형식으로 어노테이션 파일 준비 (class_id x_center y_center width height)
+    annotation_lines = []  # 어노테이션 정보 저장 리스트
+    img_path = op.join(images_folder.get_path(), image_id)
+    img = cv2.imread(img_path)  # 이미지 파일 읽기
+    h, w = img.shape[:2]  # 이미지의 높이와 너비 가져오기
+
+    for annotation in annotations:
+        cat_id = class_mapping[annotation["category"]]  # 카테고리 ID 가져오기
+        xmin, ymin, bbox_width, bbox_height = annotation["bbox"]  # 바운딩 박스 좌상단 좌표 및 너비, 높이 가져오기
+
+        # 바운딩 박스 우하단 좌표 계산
+        xmax = xmin + bbox_width
+        ymax = ymin + bbox_height
+
+        # YOLO 형식으로 좌표 변환
+        x_center = (xmin + bbox_width / 2) / w  # x 중심 좌표 계산
+        y_center = (ymin + bbox_height / 2) / h  # y 중심 좌표 계산
+        width = bbox_width / w  # 바운딩 박스 너비
+        height = bbox_height / h  # 바운딩 박스 높이
+
+        annotation_lines.append(f"{cat_id} {x_center} {y_center} {width} {height}\n")  # YOLO 형식으로 저장
+
+    # YOLO 형식의 어노테이션을 .txt 파일로 저장
+    annotation_file_path = op.join(labels_path, f"{Path(image_id).stem}.txt")
+    os.makedirs(os.path.dirname(annotation_file_path), exist_ok=True)  # 경로가 없으면 생성
+    with open(annotation_file_path, 'w') as f:
+        f.writelines(annotation_lines)  # 어노테이션 정보 파일로 저장
 
 # YOLOv5 모델을 훈련합니다.
 model = YOLO(weights)  # 사전 학습된 가중치를 로드하여 모델을 초기화합니다.
 
 # 모델 훈련
 model.train(
-    data=yaml_data_path,  # YAML 파일 경로
-    epochs=int(configs.get('epochs', 10)),  # 기본값을 10으로 설정
+    data=yaml_file_path,  # YAML 파일 경로
+    epochs=int(configs.get('epochs', 1)),  # 기본값을 1으로 설정
     batch_size=batch_size,
     imgsz=min_side,  # 이미지 크기 설정
     device='cuda' if gpu_opts.get('n_gpu', 0) != 0 else 'cpu',
