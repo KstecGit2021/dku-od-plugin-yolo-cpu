@@ -91,7 +91,6 @@ batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1  # GPU를 사
 
 # 데이터 생성기를 생성합니다.
 train_gen = DfGenerator(train_df, class_mapping, configs,
-#                        transform_generator=rnd_gen,
                         transform_generator=transformer,  # 훈련 데이터에 대한 변환기 설정
                         base_dir=images_folder.get_path(),
                         image_min_side=min_side,
