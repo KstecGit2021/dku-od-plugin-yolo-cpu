@@ -117,7 +117,7 @@ for idx, row in bb_df.iterrows():
 
     # YOLO 형식으로 어노테이션 파일 준비 (class_id x_center y_center width height)
     annotation_lines = []  # 어노테이션 정보 저장 리스트
-    img_path = op.join(images_folder.get_path(), image_id)
+    img_path = op.join(images_path, image_id)
     img = cv2.imread(img_path)  # 이미지 파일 읽기
     h, w = img.shape[:2]  # 이미지의 높이와 너비 가져오기
 
