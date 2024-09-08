@@ -10,7 +10,6 @@ import os.path as op  # OS 경로 유틸리티 모듈
 import pandas as pd  # 데이터 처리 모듈
 import torch  # PyTorch 모듈
 import torchvision.transforms as transforms  # 이미지 변환 모듈
-from torch.utils.data import DataLoader  # 데이터 로더
 from dataiku import pandasutils as pdu  # Dataiku pandas 유틸리티 모듈
 from dataiku.customrecipe import *  # Dataiku 레시피 API 모듈
 from dfgenerator import DfGenerator  # 사용자 정의 DataFrame 생성기
@@ -40,11 +39,6 @@ output_path = op.join(output_folder.get_path(), 'weights.pt')
 
 # 레시피 구성을 로드합니다.
 configs = get_recipe_config()
-
-## GPU 옵션을 로드합니다. GPU 사용 여부, GPU 목록, GPU 할당량을 설정합니다.
-#gpu_opts = gpu_utils.load_gpu_options(configs.get('should_use_gpu', False),
-#                                      configs.get('list_gpu', ''), 
-#                                      configs.get('gpu_allocation', 0.))
 
 # 'should_use_gpu'가 configs에 존재하지 않을 경우 기본값 False를 사용하도록 설정
 should_use_gpu = configs.get('should_use_gpu', False)
@@ -110,27 +104,22 @@ val_gen = DfGenerator(val_df, class_mapping, configs,
 if len(val_gen) == 0:
     val_gen = None
 
-# PyTorch DataLoader를 생성합니다.
-train_loader = DataLoader(train_gen, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
-val_loader = DataLoader(val_gen, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True) if val_gen else None
+# 데이터셋을 YAML 파일로 변환합니다.
+yaml_data_path = op.join(output_folder.get_path(), 'data.yaml')
+misc_utils.create_yaml_for_data(yaml_data_path, train_df, val_df, min_side, max_side, class_mapping)
 
-# YOLOv5 모델을 로드합니다.
+# YOLOv5 모델을 훈련합니다.
 model = YOLO(weights)  # 사전 학습된 가중치를 로드하여 모델을 초기화합니다.
 
-# 훈련 파라미터를 설정합니다.
-logging.info('모델을 {} 에폭 동안 훈련합니다.'.format(configs['epochs']))  # 훈련 에폭 수를 로그에 기록합니다.
-logging.info('레이블 수: {:15}.'.format(len(class_mapping)))  # 레이블 수를 로그에 기록합니다.
-logging.info('훈련 이미지 수: {:15}.'.format(len(train_gen.image_names)))  # 훈련 이미지 수를 로그에 기록합니다.
-logging.info('검증 이미지 수: {:11}'.format(len(val_gen.image_names) if val_gen else 0))  # 검증 이미지 수를 로그에 기록합니다.
-
-# 모델을 훈련합니다.
+# 모델 훈련
 model.train(
-    data=train_loader,
-    epochs=int(configs['epochs']),  # 훈련할 에폭 수
-    batch_size=batch_size,  # 배치 크기
-    device='cuda' if gpu_opts['n_gpu'] !=0 else 'cpu',  # GPU를 사용할지 CPU를 사용할지 설정
-    project=output_path,  # 결과를 저장할 디렉토리
-    name='yolov5_training'  # 훈련 실행 이름
+    data=yaml_data_path,  # YAML 파일 경로
+    epochs=int(configs.get('epochs', 10)),  # 기본값을 10으로 설정
+    batch_size=batch_size,
+    imgsz=min_side,  # 이미지 크기 설정
+    device='cuda' if gpu_opts.get('n_gpu', 0) != 0 else 'cpu',
+    project=output_path,
+    name='yolov5_training'
 )
 
 # 훈련된 모델을 저장합니다.
