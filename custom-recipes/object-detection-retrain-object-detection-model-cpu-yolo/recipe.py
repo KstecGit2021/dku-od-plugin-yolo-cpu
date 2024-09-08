@@ -10,11 +10,11 @@ import os.path as op  # OS 경로 유틸리티 모듈
 import pandas as pd  # 데이터 처리 모듈
 import torch  # PyTorch 모듈
 import torchvision.transforms as transforms  # 이미지 변환 모듈
+from torch.utils.data import DataLoader  # 데이터 로더
 from dataiku import pandasutils as pdu  # Dataiku pandas 유틸리티 모듈
 from dataiku.customrecipe import *  # Dataiku 레시피 API 모듈
 from dfgenerator import DfGenerator  # 사용자 정의 DataFrame 생성기
 from json import JSONDecodeError  # JSON 디코딩 에러 모듈
-#from yolov5 import YOLOv5  # YOLOv5 객체 탐지를 위한 모듈
 from ultralytics import YOLO  # YOLOv5의 최신 업데이트 모듈
 
 # 로깅을 설정합니다. 로깅 레벨을 INFO로 설정하고, 로그 메시지 형식을 지정합니다.
@@ -91,37 +91,33 @@ batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1  # GPU를 사
 
 # 데이터 생성기를 생성합니다.
 train_gen = DfGenerator(train_df, class_mapping, configs,
-                        transform_generator=transformer,  # 훈련 데이터에 대한 변환기 설정
                         base_dir=images_folder.get_path(),
-                        image_min_side=min_side,
-                        image_max_side=max_side,
-                        batch_size=batch_size)
+                        transform=transformer)  # 훈련 데이터에 대한 변환기 설정
 
 val_gen = DfGenerator(val_df, class_mapping, configs,
-                      transform_generator=None,  # 검증 데이터에는 변환기를 사용하지 않습니다.
                       base_dir=images_folder.get_path(),
-                      image_min_side=min_side,
-                      image_max_side=max_side,
-                      batch_size=batch_size)
+                      transform=None)  # 검증 데이터에는 변환기를 사용하지 않습니다.
 
 # 검증 데이터 생성기가 비어있으면 None으로 설정합니다.
 if len(val_gen) == 0:
     val_gen = None
 
+# PyTorch DataLoader를 생성합니다.
+train_loader = DataLoader(train_gen, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+val_loader = DataLoader(val_gen, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True) if val_gen else None
+
 # YOLOv5 모델을 로드합니다.
-model = YOLO.load(weights)  # 사전 학습된 가중치를 로드하여 모델을 초기화합니다.
+model = YOLO(weights)  # 사전 학습된 가중치를 로드하여 모델을 초기화합니다.
 
 # 훈련 파라미터를 설정합니다.
 logging.info('모델을 {} 에폭 동안 훈련합니다.'.format(configs['epochs']))  # 훈련 에폭 수를 로그에 기록합니다.
 logging.info('레이블 수: {:15}.'.format(len(class_mapping)))  # 레이블 수를 로그에 기록합니다.
 logging.info('훈련 이미지 수: {:15}.'.format(len(train_gen.image_names)))  # 훈련 이미지 수를 로그에 기록합니다.
-logging.info('검증 이미지 수: {:11}'.format(len(val_gen.image_names)))  # 검증 이미지 수를 로그에 기록합니다.
+logging.info('검증 이미지 수: {:11}'.format(len(val_gen.image_names) if val_gen else 0))  # 검증 이미지 수를 로그에 기록합니다.
 
 # 모델을 훈련합니다.
 model.train(
-#    train_loader=train_gen, 
-#    val_loader=val_gen,
-    data=yaml_file_path,  # 데이터셋 YAML 파일 경로
+    data=train_loader,
     epochs=int(configs['epochs']),  # 훈련할 에폭 수
     batch_size=batch_size,  # 배치 크기
     device='cuda' if gpu_opts['should_use_gpu'] else 'cpu',  # GPU를 사용할지 CPU를 사용할지 설정
