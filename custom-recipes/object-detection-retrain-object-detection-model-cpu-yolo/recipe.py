@@ -95,9 +95,10 @@ train_df, val_df = misc_utils.split_dataset(bb_df, val_split=val_split)
 batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1  # GPU를 사용할 경우 GPU의 수를 배치 크기로 설정합니다.
 
 # YOLO 데이터셋 YAML 파일 생성
+image_path = op.join(images_folder.get_path(), 'images')
 yaml_data = {
-    'train': str(images_folder.get_path()),  # 이미지 폴더 경로
-    'val': str(images_folder.get_path()),  # 검증 이미지 폴더 경로
+    'train': str(image_path),  # 이미지 폴더 경로
+    'val': str(image_path),  # 검증 이미지 폴더 경로
     'nc': len(class_mapping),  # 클래스 수
     'names': [inverse_cm[i] for i in range(len(inverse_cm))]  # 클래스 이름
 }
