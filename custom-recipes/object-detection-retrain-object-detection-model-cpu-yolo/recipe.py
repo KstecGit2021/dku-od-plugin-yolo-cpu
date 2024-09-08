@@ -52,10 +52,10 @@ gpu_opts = gpu_utils.load_gpu_options(should_use_gpu,
                                       configs.get('gpu_allocation', 0.))
 
 # 이미지 변환을 정의합니다. 이미지를 640x640으로 크기를 조정하고 텐서로 변환합니다.
-transformer = transforms.Compose([
-    transforms.Resize((640, 640)),  # 이미지를 640x640 크기로 조정합니다.
-    transforms.ToTensor()  # 이미지를 텐서로 변환합니다.
-])
+#transformer = transforms.Compose([
+#    transforms.Resize((640, 640)),  # 이미지를 640x640 크기로 조정합니다.
+#    transforms.ToTensor()  # 이미지를 텐서로 변환합니다.
+#])
 
 # 이미지의 최소 및 최대 크기를 설정합니다.
 min_side = int(configs['min_side'])  # 이미지의 최소 측면 길이
