@@ -123,4 +123,4 @@ model.train(
 )
 
 # 훈련된 모델을 저장합니다.
-#torch.save(model.state_dict(), output_path)  # 모델의 상태 사전을 저장합니다.
+torch.save(model.state_dict(), output_path)  # 모델의 상태 사전을 저장합니다.
