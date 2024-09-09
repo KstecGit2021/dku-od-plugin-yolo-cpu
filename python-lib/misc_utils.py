@@ -51,7 +51,7 @@ def mkv_to_mp4(mkv_path, remove_mkv=False, has_audio=True, quiet=True):
     if remove_mkv and os.path.isfile(mp4_path):
         os.remove(mkv_path)
 
-def split_dataset(df, col_filename, val_split=0.8, shuffle=True, seed=42):
+def split_dataset(df, val_split=0.8, shuffle=True, seed=42):
     """데이터셋을 학습/검증용으로 분할합니다.
 
     Args:
@@ -64,9 +64,9 @@ def split_dataset(df, col_filename, val_split=0.8, shuffle=True, seed=42):
         학습용 데이터프레임과 검증용 데이터프레임.
     """
     # 고유한 이미지 경로 추출
-    #paths = df.path.unique()
-    print(col_filename)
-    paths = df[col_filename].unique()
+    paths = df.path.unique()
+    print('col_filename')
+    #paths = df[col_filename].unique()
     
     if shuffle:
         np.random.seed(seed)
