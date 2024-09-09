@@ -65,6 +65,8 @@ def split_dataset(df, val_split=0.8, shuffle=True, seed=42):
     """
     # 고유한 이미지 경로 추출
     paths = df.path.unique()
+    paths = df[configs['col_filename']].unique()
+    
     if shuffle:
         np.random.seed(seed)
         np.random.shuffle(paths)  # 경로를 랜덤으로 섞음
