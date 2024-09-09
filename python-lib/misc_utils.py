@@ -63,9 +63,10 @@ def split_dataset(df, val_split=0.8, shuffle=True, seed=42):
     Returns:
         학습용 데이터프레임과 검증용 데이터프레임.
     """
+
     # 고유한 이미지 경로 추출
     #paths = df.path.unique()
-    print('col_filename')
+    print("aaa")
     #paths = df[col_filename].unique()
     
     if shuffle:
