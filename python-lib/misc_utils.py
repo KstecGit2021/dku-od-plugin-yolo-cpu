@@ -66,18 +66,18 @@ def split_dataset(df, val_split=0.8, shuffle=True, seed=42):
 
     # 고유한 이미지 경로 추출
     #paths = df.path.unique()
-    print("aaa")
-    #paths = df[col_filename].unique()
+    # print("aaa")
+    paths = df[col_filename].unique()
     
-#    if shuffle:
-#        np.random.seed(seed)
-#        np.random.shuffle(paths)  # 경로를 랜덤으로 섞음
+    if shuffle:
+        np.random.seed(seed)
+        np.random.shuffle(paths)  # 경로를 랜덤으로 섞음
 
     # 학습 데이터와 검증 데이터로 분할
-#    train_paths = paths[:int(len(paths) * val_split)]
-#    idxes = df.path.isin(train_paths)  # 학습 데이터에 해당하는 인덱스 추출
-#    return df[idxes], df[~idxes]  # 학습 및 검증 데이터프레임 반환
-    return
+    train_paths = paths[:int(len(paths) * val_split)]
+    idxes = df.path.isin(train_paths)  # 학습 데이터에 해당하는 인덱스 추출
+    return df[idxes], df[~idxes]  # 학습 및 검증 데이터프레임 반환
+#    return
 
 def get_cm(unique_vals):
     """고유 값에 따른 클래스 매핑을 반환합니다.
