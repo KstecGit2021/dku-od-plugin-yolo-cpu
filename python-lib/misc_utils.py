@@ -75,7 +75,7 @@ def split_dataset(df, col_filename, val_split=0.8, shuffle=True, seed=42):
 
     # 학습 데이터와 검증 데이터로 분할
     train_paths = paths[:int(len(paths) * val_split)]
-    idxes = df.path.isin(train_paths)  # 학습 데이터에 해당하는 인덱스 추출
+    idxes = df[col_filename].isin(train_paths)  # 학습 데이터에 해당하는 인덱스 추출
     return df[idxes], df[~idxes]  # 학습 및 검증 데이터프레임 반환
 #    return
 
