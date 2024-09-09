@@ -99,7 +99,7 @@ train_df, val_df = misc_utils.split_dataset(bb_df, configs['col_filename'], val_
 # GPU 사용에 따라 배치 크기를 설정합니다.
 batch_size = gpu_opts['n_gpu'] if configs['should_use_gpu'] else 1  # GPU를 사용할 경우 GPU의 수를 배치 크기로 설정합니다.
 
-images_path = op.join(input_folder.get_path())  # 이미지 폴더의 경로를 설정합니다.
+images_path = op.join(images_folder.get_path())  # 이미지 폴더의 경로를 설정합니다.
 # images_path
 
 labels_path = op.join(os.path.dirname(images_path), 'labels')  # 라벨을 저장할 경로를 설정합니다.
