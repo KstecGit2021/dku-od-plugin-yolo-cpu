@@ -8,7 +8,7 @@ import pandas as pd, numpy as np  # 데이터 처리 및 수치 연산을 위한
 from dataiku import pandasutils as pdu  # 데이터이쿠에서 제공하는 판다스 유틸리티 함수들
 
 from dfgenerator import DfGenerator  # 데이터프레임 제너레이터 모듈
-import gpu_utils  # GPU 관련 유틸리티 함수들을 포함한 모듈
+# import gpu_utils  # GPU 관련 유틸리티 함수들을 포함한 모듈
 import retinanet_model  # RetinaNet 모델을 다루기 위한 모듈
 
 # 데이터이쿠에서 입력으로 제공되는 비디오 폴더를 가져옴
