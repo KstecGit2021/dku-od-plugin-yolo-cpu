@@ -184,7 +184,7 @@ for idx, row in bb_df.iterrows():
     with open(annotation_file_path, 'w') as f:
         f.writelines(annotation_lines)  # YOLO 형식의 어노테이션 정보를 파일로 저장합니다.
 
-# YOLOv5 모델을 훈련합니다.
+# YOLOv8 모델을 훈련합니다.
 model = YOLO(weights)  # 사전 학습된 가중치를 로드하여 YOLO 모델을 초기화합니다.
 
 project_path = op.join(output_folder.get_path(), 'project')  # 모델 훈련 결과를 저장할 프로젝트 경로를 설정합니다.
