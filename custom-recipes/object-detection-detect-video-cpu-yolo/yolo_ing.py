@@ -1,5 +1,6 @@
 import logging
 import os
+import json
 import cv2
 import numpy as np
 import torch
@@ -21,7 +22,21 @@ def load_yolo_model(weights_path):
     model = YOLO(weights_path)  # YOLOv8 모델 로드
     return model
 
-def draw_bboxes(img, boxes, scores, labels, confidence_cap):
+def load_labels(labels_path):
+    """클래스 레이블과 이름의 매핑 정보를 로드하는 함수.
+    
+    Args:
+        labels_path: JSON 파일 경로.
+
+    Returns:
+        labels_to_names: 클래스 인덱스와 이름의 매핑 사전.
+    """
+    with open(labels_path, 'r') as file:
+        class_names = json.load(file)
+    labels_to_names = {i: name for i, name in enumerate(class_names)}
+    return labels_to_names
+
+def draw_bboxes(img, boxes, scores, labels, labels_to_names, confidence_cap):
     """이미지에 바운딩 박스를 그립니다.
 
     Args:
@@ -29,6 +44,7 @@ def draw_bboxes(img, boxes, scores, labels, confidence_cap):
         boxes:          바운딩 박스 좌표.
         scores:         객체의 신뢰도 점수.
         labels:         객체의 클래스 레이블.
+        labels_to_names: 클래스 인덱스와 이름의 매핑 사전.
         confidence_cap: 신뢰도 캡션을 추가할지 여부.
 
     Returns:
@@ -41,11 +57,14 @@ def draw_bboxes(img, boxes, scores, labels, confidence_cap):
         x1, y1, x2, y2 = map(int, box)
         color = (0, 255, 0)  # 상자 색상 설정 (초록색)
 
+        # 클래스 이름을 매핑 정보에서 찾기
+        class_name = labels_to_names.get(label, 'Unknown')
+
         # 바운딩 박스 그리기
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
         
         if confidence_cap:
-            caption = f"{label} {score:.2f}"
+            caption = f"{class_name} {score:.2f}"
             cv2.putText(img, caption, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
         
     return img
@@ -77,14 +96,15 @@ def mkv_to_mp4(mkv_path, remove_mkv=False, has_audio=True, quiet=True):
     if remove_mkv and os.path.isfile(mp4_path):
         os.remove(mkv_path)
 
-def detect_in_video_file(model, in_vid_path, out_dir, detection_rate=None):
+def detect_in_video_file(model, labels_to_names, in_vid_path, out_dir, detection_rate=None):
     """비디오 파일에서 객체를 탐지하고 비디오 프레임에 결과를 기록합니다.
 
     Args:
-        model:       YOLOv8 모델.
-        in_vid_path: 입력 비디오 파일 경로.
-        out_dir:     결과 비디오를 저장할 폴더 경로.
-        detection_rate: 객체 탐지 빈도 (프레임 단위). 지정하지 않으면 기본 비디오 FPS 사용.
+        model:            YOLOv8 모델.
+        labels_to_names:  클래스 인덱스와 이름의 매핑 사전.
+        in_vid_path:      입력 비디오 파일 경로.
+        out_dir:          결과 비디오를 저장할 폴더 경로.
+        detection_rate:   객체 탐지 빈도 (프레임 단위). 지정하지 않으면 기본 비디오 FPS 사용.
 
     Returns:
         None
@@ -121,7 +141,7 @@ def detect_in_video_file(model, in_vid_path, out_dir, detection_rate=None):
             scores = results.xyxy[0][:, 4].cpu().numpy()  # 신뢰도
             labels = results.xyxy[0][:, 5].astype(int).cpu().numpy()  # 클래스 레이블
 
-            img = draw_bboxes(img, boxes, scores, labels, confidence_cap=True)
+            img = draw_bboxes(img, boxes, scores, labels, labels_to_names, confidence_cap=True)
 
         vw.write(img)
         idx += 1
@@ -133,11 +153,16 @@ def detect_in_video_file(model, in_vid_path, out_dir, detection_rate=None):
 
 # 메인 부분
 if __name__ == '__main__':
+    # 파일 경로 설정
     weights_path = 'path/to/yolov8_weights.pt'  # YOLOv8 가중치 파일 경로
+    labels_path = 'path/to/labels.json'  # 클래스 라벨 파일 경로
+
+    # 모델 및 레이블 로드
     model = load_yolo_model(weights_path)
+    labels_to_names = load_labels(labels_path)
 
     input_video_path = 'path/to/input_video.mp4'
     output_folder = 'path/to/output_folder'
     detection_rate = 1  # 매 프레임마다 객체 탐지
 
-    detect_in_video_file(model, input_video_path, output_folder, detection_rate)
+    detect_in_video_file(model, labels_to_names, input_video_path, output_folder, detection_rate)
