@@ -11,7 +11,7 @@ from dataiku import pandasutils as pdu  # 데이터이쿠에서 제공하는 판
 from dfgenerator import DfGenerator  # 데이터프레임 제너레이터 모듈
 import gpu_utils  # GPU 관련 유틸리티 함수들을 포함한 모듈
 import misc_utils  # 다양한 유틸리티 함수들을 포함한 모듈
-import retinanet_model  # RetinaNet 모델을 다루기 위한 모듈
+import ultralytics  # YOLOv8 모델을 다루기 위한 모듈
 
 # 데이터이쿠에서 입력으로 제공되는 비디오 폴더를 가져옴
 video_folder = dataiku.Folder(get_input_names_for_role('video')[0])
@@ -20,7 +20,7 @@ video_folder = dataiku.Folder(get_input_names_for_role('video')[0])
 weights_folder = dataiku.Folder(get_input_names_for_role('weights')[0])
 
 # 가중치 파일의 경로를 설정
-weights = op.join(weights_folder.get_path(), 'weights.h5')
+weights = op.join(weights_folder.get_path(), 'weights.pt')
 
 # 클래스 라벨과 이름의 매핑 정보를 로드
 labels_to_names = json.loads(open(op.join(weights_folder.get_path(), 'labels.json')).read())
@@ -36,8 +36,8 @@ gpu_opts = gpu_utils.load_gpu_options(configs.get('should_use_gpu', False),
                                       configs.get('list_gpu', ''),
                                       configs.get('gpu_allocation', 0.))
 
-# 테스트용 RetinaNet 모델을 생성
-model = retinanet_model.get_test_model(weights, len(labels_to_names))
+# YOLOv8 모델을 생성
+model = ultralytics.YOLO(weights)
 
 # 입력 비디오 파일의 경로를 설정
 video_in = op.join(video_folder.get_path(), configs['video_name'])
@@ -46,4 +46,10 @@ video_in = op.join(video_folder.get_path(), configs['video_name'])
 rate = 1 if not configs['detection_custom'] else int(configs['detection_rate'])
 
 # 비디오 파일에서 객체 탐지를 수행하고 결과를 출력 폴더에 저장
-retinanet_model.detect_in_video_file(model, video_in, output_folder.get_path(), detection_rate=rate)
+def detect_in_video_file(model, video_in, output_path, detection_rate):
+    # YOLOv8의 `predict` 함수로 비디오에 대한 객체 탐지를 수행
+    results = model.predict(source=video_in, save=True, project=output_path, name="detection_results")
+    # 비디오에 대한 객체 탐지 결과를 저장합니다.
+    results.save()
+
+detect_in_video_file(model, video_in, output_folder.get_path(), rate)
