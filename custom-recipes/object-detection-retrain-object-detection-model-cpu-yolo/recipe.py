@@ -211,14 +211,14 @@ model.train(
     project=project_path,  # 훈련 결과를 저장할 프로젝트 경로를 설정합니다.
     name='yolov8_training',  # 프로젝트 이름을 설정합니다.
 
-    lr=float(configs.get('lr', 0.01)),  # 학습률을 설정합니다. 기본값은 0.01입니다.
+    lr0=float(configs.get('lr', 0.01)),  # 학습률을 설정합니다. 기본값은 0.01입니다.
     weight_decay=float(configs.get('weight_decay', 0.0005)),  # 가중치 감소를 설정합니다. 기본값은 0.0005입니다.
 
     augment=configs.get('augment', True),  # 데이터 증강 여부를 설정합니다. 기본값은 True입니다.
     patience=int(configs.get('patience', 10)),  # 조기 종료를 위한 인내심을 설정합니다. 기본값은 10입니다.
 
     save_period=int(configs.get('save_period', 5)),  # 모델 저장 주기를 설정합니다. 기본값은 5입니다.
-    image_weights=configs.get('image_weights', False)  # 이미지 가중치 사용 여부를 설정합니다. 기본값은 False입니다.
+#    image_weights=configs.get('image_weights', False)  # 이미지 가중치 사용 여부를 설정합니다. 기본값은 False입니다.
 )
 
 # 훈련된 모델을 저장합니다.
