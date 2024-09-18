@@ -10,6 +10,8 @@ from tensorflow.keras import optimizers
 from tensorflow.keras import callbacks
 import tensorflow as tf
 import cv2
+import logging
+
 
 # 로그 설정: 로그 메시지의 형식과 레벨을 설정합니다.
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
@@ -154,6 +156,51 @@ def draw_bboxes(src_path, dst_path, df, label_cap, confidence_cap, ids):
     logging.info('Drawing {}'.format(dst_path))
     cv2.imwrite(dst_path, image)
 
+
+def draw_bboxes(src_path, dst_path, df, label_cap, confidence_cap, ids):
+    """Draw boxes on images.
+
+    Args:
+        src_path:       Path to the source image.
+        dst_path:       Path to the destination image.
+        df:             Dataframe containing the bounding boxes coordinates.
+        label_cap:      Boolean to add label caption on image.
+        confidence_cap: Boolean to add confidence % on image.
+        ids:            Ids list for each unique possible labels.
+
+    Returns:
+        None.
+    """
+    image = cv2.imread(src_path)
+
+    for _, row in df.iterrows():
+        if isinstance(row.class_name, float): continue
+
+        # Assuming df has columns: ['class_name', 'x1', 'y1', 'x2', 'y2', 'confidence']
+        box = (int(row['x1']), int(row['y1']), int(row['x2']), int(row['y2']))
+        name = str(row['class_name'])
+        confidence = round(row['confidence'], 2)
+
+        # Define color based on label index
+        color = label_color(ids.index(name))
+
+        # Draw bounding box
+        cv2.rectangle(image, (box[0], box[1]), (box[2], box[3]), color, 2)
+
+        # Draw label and confidence if specified
+        if label_cap or confidence_cap:
+            txt = []
+            if label_cap:
+                txt.append(name)
+            if confidence_cap:
+                txt.append(str(confidence))
+            cv2.putText(image, ' '.join(txt), (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+    logging.info('Drawing {}'.format(dst_path))
+    cv2.imwrite(dst_path, image)
+    
+    
+    
 def draw_caption(image, box, caption):
     """RetinaNet의 `draw_caption`의 커스텀 버전으로, 박스 내부에 클래스 이름을 씁니다.
 
