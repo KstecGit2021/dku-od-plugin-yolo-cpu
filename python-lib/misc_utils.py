@@ -157,6 +157,19 @@ def draw_bboxes_retinanet(src_path, dst_path, df, label_cap, confidence_cap, ids
     cv2.imwrite(dst_path, image)
 
 
+def label_color(label_index):
+    """Generate a color for a given label index.
+
+    Args:
+        label_index: Index of the label.
+
+    Returns:
+        A tuple representing an RGB color.
+    """
+    np.random.seed(label_index)  # Seed for reproducibility
+    return tuple(np.random.randint(0, 255, 3).tolist())
+    
+
 def draw_bboxes(src_path, dst_path, df, label_cap, confidence_cap, ids):
     """Draw boxes on images.
 
