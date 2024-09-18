@@ -5,10 +5,10 @@ var app = angular.module('detectionRecipe.retrain', []);
 app.controller('retrainRecipeController', function($scope) {
     
     // 최적화 방법 옵션을 정의
-    $scope.optimizerOptions = [
-        ["Adam", "adam"],
-        ["SGD", "sgd"]
-    ];
+//    $scope.optimizerOptions = [
+//        ["Adam", "adam"],
+//        ["SGD", "sgd"]
+//    ];
 
     // 특정 변수(varName)가 정의되지 않았을 경우 초기값(initValue)으로 설정하는 함수
     var initVariable = function(varName, initValue) {
