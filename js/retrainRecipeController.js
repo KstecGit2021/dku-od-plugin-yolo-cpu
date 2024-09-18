@@ -44,11 +44,10 @@ app.controller('retrainRecipeController', function($scope) {
         initVariable("lr", 0.01); // 학습률을 설정합니다. 기본값은 0.01입니다.
         initVariable("nb_epochs", 10); // 에포크 수 초기화
         initVariable("tensorboard", false); // TensorBoard 사용 여부 초기화
-//        initVariable("optimizer", "adam"); // 최적화 방법 초기화
         initVariable("freeze", true); // 모델 동결 여부 초기화
         initVariable("epochs", 10); // 에포크 수 초기화
         initVariable("augment", true); // 데이터 증강 사용 여부 여부 초기화
-        initVariable("reducelr", false); // 학습률 감소 사용 여부 초기화
+        initVariable("reducelr", true); // 학습률 감소 사용 여부 초기화
         initVariable("reducelr_patience", 10); // 조기 종료를 위한 인내심을 설정합니다. 기본값은 10입니다.
         initVariable("reducelr_weight_decay", 0.0005); // 가중치 감소를 설정합니다. 기본값은 0.0005입니다.
         initVariable("single_column_data", false); // 단일 열 데이터 사용 여부 초기화
