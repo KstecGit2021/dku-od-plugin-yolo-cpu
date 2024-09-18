@@ -2,7 +2,7 @@
     "id": "object-detection-cpu-yolo",
     "version": "0.1.7",
     "meta": {
-        "label": "이미지에서 객체 탐지 (CPU) yolo",
+        "label": "이미지에서 객체 탐지 yolo8",
         "description": "딥 러닝을 사용하여 이미지에서 객체를 탐지합니다. \n⚠️ DSS 버전 10부터 이 플러그인은 일부 기능이 [기본 제공 객체 탐지 기능](https://doc.dataiku.com/dss/latest/machine-learning/computer-vision/index.html)에 의해 대체되었습니다.",
         "author": "Dataiku",
         "icon": "icon-eye-open",
