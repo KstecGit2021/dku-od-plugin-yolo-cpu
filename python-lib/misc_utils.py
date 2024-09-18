@@ -16,43 +16,6 @@ import logging
 # 로그 설정: 로그 메시지의 형식과 레벨을 설정합니다.
 logging.basicConfig(level=logging.INFO, format='[Object Detection] %(levelname)s - %(message)s')
 
-def mkv_to_mp4(mkv_path, remove_mkv=False, has_audio=True, quiet=True):
-    """MKV 파일을 MP4 형식으로 변환합니다.
-
-    Args:
-        mkv_path:   MKV 파일의 경로.
-        remove_mkv: 변환 후 MKV 파일을 삭제할지 여부.
-        has_audio:  MP4 파일에 오디오를 포함할지 여부.
-        quiet:      ffmpeg 변환 과정에서 메시지를 출력할지 여부.
-
-    Returns:
-        None
-    """
-    # MKV 파일이 존재하는지 확인
-    assert os.path.isfile(mkv_path)
-    print(mkv_path)
-    assert os.path.splitext(mkv_path)[1] == '.mkv'  # 파일 확장자가 MKV인지 확인
-    mp4_path = os.path.splitext(mkv_path)[0] + '.mp4'  # MP4 파일 경로 생성
-
-    # 기존에 동일한 이름의 MP4 파일이 있으면 삭제
-    if os.path.isfile(mp4_path):
-        os.remove(mp4_path)
-
-    # 오디오 코덱 설정: 오디오를 유지할지 여부에 따라 달라짐
-    audio_codec_string = '-acodec copy' if has_audio else '-an'
-
-    # ffmpeg 명령어의 메시지를 숨길지 여부
-    quiet_str = '>/dev/null 2>&1' if quiet else ''
-    # ffmpeg 명령어 생성 및 실행
-    cmd = 'ffmpeg -i {} -vcodec copy {} {} {}'.format(
-        mkv_path, audio_codec_string, mp4_path, quiet_str)
-
-    sp.call(cmd, shell=True)
-
-    # 변환이 성공적으로 완료되면 원본 MKV 파일 삭제
-    if remove_mkv and os.path.isfile(mp4_path):
-        os.remove(mkv_path)
-
 def split_dataset(df, col_filename, val_split=0.8, shuffle=True, seed=42):
     """데이터셋을 학습/검증용으로 분할합니다.
 
@@ -117,45 +80,6 @@ def compute_metrics(true_pos, false_pos, false_neg):
         f1 = 2 / (1 / precision + 1 / recall)  # F1 점수 계산
 
     return precision, recall, f1
-
-def draw_bboxes_retinanet(src_path, dst_path, df, label_cap, confidence_cap, ids):
-    """Draw boxes on images.
-
-    Args:
-        src_path:       Path to the source image.
-        dst_path:       Path to the destination image.
-        df:             Dataframe containing the bounding boxes coordinates.
-        label_cap:      Boolean to add label caption on image.
-        confidence_cap: Boolean to add confidence % on image.
-        ids:            Ids list for each unique possible labels.
-
-    Returns:
-        None.
-    """
-    image = read_image_bgr(src_path)
-
-    for _, row in df.iterrows():
-        if isinstance(row.class_name, float): continue
-
-        box = tuple(row[1:5])
-        name = str(row[5])
-
-        color = label_color(ids.index(name))
-
-        draw_box(image, box, color=color)
-
-        if label_cap or confidence_cap:
-            txt = []
-            if label_cap:
-                txt = [name]
-            if confidence_cap:
-                confidence = round(row[6], 2)
-                txt.append(str(confidence))
-            draw_caption(image, box, ' '.join(txt))
-
-    logging.info('Drawing {}'.format(dst_path))
-    cv2.imwrite(dst_path, image)
-
 
 def label_color(label_index):
     """Generate a color for a given label index.
