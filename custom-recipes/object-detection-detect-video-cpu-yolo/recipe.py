@@ -52,13 +52,10 @@ def get_model(weights, n_gpu=None):
     # 사용할 장치를 설정 (CUDA가 사용 가능하고 n_gpu가 0보다 크면 GPU 사용)
     device = torch.device('cuda' if torch.cuda.is_available() and n_gpu > 0 else 'cpu')
 
-    # YOLOv8 모델을 정의합니다.
-    # 모델 생성 부분은 주석 처리되어 있으며, 필요한 경우 활성화하여 사용해야 합니다.
-
     # 가중치 로딩
     if weights is not None:
         logging.info('모델 가중치를 로딩 중: %s', weights)
-        # 모델 로드
+        # YOLOv8 모델 로드
         model = ultralytics.YOLO(weights)
 
     # 다중 GPU 설정
@@ -73,7 +70,7 @@ def get_model(weights, n_gpu=None):
         logging.info('CPU 모드에서 모델 로딩 중. 느릴 수 있습니다. 가능한 경우 GPU 사용 권장.')
         # CPU 모드에서는 특별한 설정 필요 없음
 
-    return model
+    return model  # 로드된 모델 반환
 
 # YOLOv8 모델을 생성
 model = get_model(weights, gpu_opts['n_gpu'])
@@ -103,37 +100,37 @@ def detect_in_video_file(model, video_in, output_path, name, rate=1):
     mp4_output_path = os.path.join(full_output_path, 'mp4')
 
     # 출력 폴더가 없으면 생성
-    os.makedirs(jpg_output_path, exist_ok=True)
-    os.makedirs(mp4_output_path, exist_ok=True)
+    os.makedirs(jpg_output_path, exist_ok=True)  # JPEG 파일을 저장할 폴더 생성
+    os.makedirs(mp4_output_path, exist_ok=True)  # MP4 비디오를 저장할 폴더 생성
 
     # 비디오 캡처 객체 생성
-    cap = cv2.VideoCapture(video_in)
-    if not cap.isOpened():
+    cap = cv2.VideoCapture(video_in)  # 입력 비디오 파일 열기
+    if not cap.isOpened():  # 비디오 파일 열기 실패 시
         raise ValueError("비디오 파일을 열 수 없습니다.")
 
     # 비디오 정보 가져오기
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)  # 초당 프레임 수
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))  # 비디오 프레임 너비
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))  # 비디오 프레임 높이
 
     # YOLOv8 결과를 저장할 리스트
     results = []
 
     # MP4 비디오 파일 생성
-    output_video_file = os.path.join(mp4_output_path, f"{name}")
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # MP4 codec
-    out = cv2.VideoWriter(output_video_file, fourcc, fps, (frame_width, frame_height))
+    output_video_file = os.path.join(mp4_output_path, f"{name}")  # 출력 비디오 파일 경로
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # MP4 codec 설정
+    out = cv2.VideoWriter(output_video_file, fourcc, fps, (frame_width, frame_height))  # 비디오 작성 객체 생성
 
-    frame_idx = 0
+    frame_idx = 0  # 프레임 인덱스 초기화
     while True:
-        ret, frame = cap.read()
-        if not ret:
+        ret, frame = cap.read()  # 비디오에서 프레임 읽기
+        if not ret:  # 프레임을 읽지 못한 경우 루프 종료
             break
 
         # 지정된 프레임 비율에 따라 객체 탐지
-        if frame_idx % rate == 0:
+        if frame_idx % rate == 0:  # 설정된 프레임 간격에 따라 탐지
             # YOLO 모델로 객체 탐지 수행
-            result = model(frame)
+            result = model(frame)  # 현재 프레임에 대해 객체 탐지
 
             # `result`는 리스트로 반환되므로 각 항목에 대해 처리
             for res in result:
@@ -141,23 +138,22 @@ def detect_in_video_file(model, video_in, output_path, name, rate=1):
                 annotated_frame = res.plot()  # plot 메서드를 사용하여 결과 그리기
 
                 # 프레임을 JPEG 파일로 저장
-                jpeg_file = os.path.join(jpg_output_path, f"frame_{frame_idx}.jpg")
-                cv2.imwrite(jpeg_file, annotated_frame)
+                jpeg_file = os.path.join(jpg_output_path, f"frame_{frame_idx}.jpg")  # JPEG 파일 경로
+                cv2.imwrite(jpeg_file, annotated_frame)  # JPEG 파일로 저장
 
                 # 프레임을 MP4 비디오에 추가
-                out.write(annotated_frame)
+                out.write(annotated_frame)  # 비디오에 프레임 추가
 
             results.extend(result)  # 모든 탐지 결과를 리스트에 추가
 
-        frame_idx += 1
+        frame_idx += 1  # 프레임 인덱스 증가
 
     # 비디오 캡처 객체와 비디오 작성 객체 해제
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
+    cap.release()  # 비디오 캡처 객체 해제
+    out.release()  # 비디오 작성 객체 해제
+    cv2.destroyAllWindows()  # 모든 OpenCV 윈도우 닫기
 
-    return results
-
+    return results  # 탐지 결과 반환
 
 # 비디오 파일에서 객체 탐지 수행
 results = detect_in_video_file(model, video_in, output_folder.get_path(), configs['video_name'], rate)
@@ -171,34 +167,27 @@ def save_results(results_list, base_path):
     """
     # base_path가 존재하지 않으면 생성
     if not os.path.exists(base_path):
-        os.makedirs(base_path)
+        os.makedirs(base_path)  # 지정된 경로 생성
 
-    for i, result in enumerate(results_list):
+    for i, result in enumerate(results_list):  # 각 결과에 대해 반복
         result_data = {
-            'names': result.names,
-            'orig_shape': result.orig_shape,
-            'path': result.path,
-            'save_dir': result.save_dir,
-            'speed': result.speed,
+            'names': result.names,  # 탐지된 객체의 이름
+            'orig_shape': result.orig_shape,  # 원본 이미지의 크기
+            'path': result.path,  # 이미지 경로
+            'save_dir': result.save_dir,  # 저장 디렉토리
+            'speed': result.speed,  # 탐지 속도
             # 이미지 배열은 별도로 저장됨
         }
 
         # 메타데이터 저장
-        json_file_path = os.path.join(base_path, f'result_{i}.json')
+        json_file_path = os.path.join(base_path, f'result_{i}.json')  # JSON 파일 경로
         with open(json_file_path, 'w') as f:
-            json.dump(result_data, f)
+            json.dump(result_data, f)  # JSON 파일로 결과 저장
 
         # 이미지 배열을 PNG 파일로 저장
-        img = Image.fromarray(result.orig_img)
-        image_file_path = os.path.join(base_path, f'result_{i}_image.png')
-        img.save(image_file_path)
+        img = Image.fromarray(result.orig_img)  # 이미지 배열을 PIL 이미지로 변환
+        image_file_path = os.path.join(base_path, f'result_{i}_image.png')  # 이미지 파일 경로
+        img.save(image_file_path)  # PNG 파일로 저장
 
-# 예제 사용법
-# save_results(results_list, '/path/to/save')
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(output_folder.get_path())
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# save_results(results, output_folder.get_path())
-save_results(results, os.path.join(output_folder.get_path(), configs['video_name'], "result") )
+# 탐지 결과를 지정된 경로에 저장
+save_results(results, os.path.join(output_folder.get_path(), configs['video_name'], "result"))
