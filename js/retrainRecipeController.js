@@ -47,16 +47,6 @@ app.controller('retrainRecipeController', function($scope) {
         initVariable("optimizer", "adam"); // 최적화 방법 초기화
         initVariable("freeze", true); // 모델 동결 여부 초기화
         initVariable("epochs", 10); // 에포크 수 초기화
-        initVariable("flip_x", 0.5); // X축 플립 비율 초기화
-        initVariable("flip_y", 0.0); // Y축 플립 비율 초기화
-        initVariable("min_rotation", -0.1); // 최소 회전 각도 초기화
-        initVariable("max_rotation", 0.1); // 최대 회전 각도 초기화
-        initVariable("min_trans", -0.1); // 최소 전이 비율 초기화
-        initVariable("max_trans", 0.1); // 최대 전이 비율 초기화
-        initVariable("min_shear", -0.1); // 최소 전단 비율 초기화
-        initVariable("max_shear", 0.1); // 최대 전단 비율 초기화
-        initVariable("min_scaling", 0.9); // 최소 스케일링 비율 초기화
-        initVariable("max_scaling", 1.1); // 최대 스케일링 비율 초기화
         initVariable("augment", true); // 데이터 증강 사용 여부 여부 초기화
         initVariable("reducelr", false); // 학습률 감소 사용 여부 초기화
         initVariable("reducelr_patience", 2); // 학습률 감소의 인내 기간 초기화
