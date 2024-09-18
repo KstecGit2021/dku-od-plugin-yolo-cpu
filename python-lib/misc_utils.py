@@ -117,44 +117,42 @@ def compute_metrics(true_pos, false_pos, false_neg):
     return precision, recall, f1
 
 def draw_bboxes(src_path, dst_path, df, label_cap, confidence_cap, ids):
-    """이미지에 바운딩 박스를 그립니다.
+    """Draw boxes on images.
 
     Args:
-        src_path:       원본 이미지 경로.
-        dst_path:       결과 이미지 경로.
-        df:             바운딩 박스 좌표를 포함한 데이터프레임.
-        label_cap:      이미지에 라벨 캡션을 추가할지 여부.
-        confidence_cap: 이미지에 신뢰도 %를 추가할지 여부.
-        ids:            고유한 라벨에 대한 ID 리스트.
+        src_path:       Path to the source image.
+        dst_path:       Path to the destination image.
+        df:             Dataframe containing the bounding boxes coordinates.
+        label_cap:      Boolean to add label caption on image.
+        confidence_cap: Boolean to add confidence % on image.
+        ids:            Ids list for each unique possible labels.
 
     Returns:
-        None
+        None.
     """
-    image = read_image_bgr(src_path)  # 이미지를 BGR 형식으로 읽음
+    image = read_image_bgr(src_path)
 
-    # 데이터프레임의 각 행에 대해 바운딩 박스를 그림
     for _, row in df.iterrows():
-        if isinstance(row.class_name, float): continue  # 클래스 이름이 없는 경우 건너뜀
+        if isinstance(row.class_name, float): continue
 
-        box = tuple(row[1:5])  # 바운딩 박스 좌표
-        name = str(row[5])  # 클래스 이름
+        box = tuple(row[1:5])
+        name = str(row[5])
 
-        color = label_color(ids.index(name))  # 클래스에 해당하는 색상 가져오기
+        color = label_color(ids.index(name))
 
-        draw_box(image, box, color=color)  # 이미지에 바운딩 박스를 그림
+        draw_box(image, box, color=color)
 
-        # 라벨 캡션이나 신뢰도를 이미지에 추가
         if label_cap or confidence_cap:
             txt = []
             if label_cap:
-                txt = [name]  # 라벨 이름 추가
+                txt = [name]
             if confidence_cap:
-                confidence = round(row[6], 2)  # 신뢰도 추가
+                confidence = round(row[6], 2)
                 txt.append(str(confidence))
-            draw_caption(image, box, ' '.join(txt))  # 캡션 추가
+            draw_caption(image, box, ' '.join(txt))
 
-    logging.info('Drawing {}'.format(dst_path))  # 로그 출력
-    cv2.imwrite(dst_path, image)  # 결과 이미지를 저장
+    logging.info('Drawing {}'.format(dst_path))
+    cv2.imwrite(dst_path, image)
 
 def draw_caption(image, box, caption):
     """RetinaNet의 `draw_caption`의 커스텀 버전으로, 박스 내부에 클래스 이름을 씁니다.
