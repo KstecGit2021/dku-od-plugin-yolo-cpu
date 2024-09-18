@@ -12,9 +12,10 @@ from dfgenerator import DfGenerator  # 데이터프레임 제너레이터 모듈
 import gpu_utils  # GPU 관련 유틸리티 함수들을 포함한 모듈
 import misc_utils  # 다양한 유틸리티 함수들을 포함한 모듈
 import ultralytics  # YOLOv8 모델을 다루기 위한 모듈
-from PIL import Image  # 이미지 처리 라이브러리
-import torch  # PyTorch 라이브러리
-import cv2  # OpenCV 라이브러리
+from PIL import Image
+import torch
+import cv2
+
 
 # 데이터이쿠에서 입력으로 제공되는 비디오 폴더를 가져옴
 video_folder = dataiku.Folder(get_input_names_for_role('video')[0])
@@ -44,20 +45,22 @@ def get_model(weights, n_gpu=None):
 
     Args:
         weights: 초기 가중치 파일의 경로.
+        num_classes: 탐지할 클래스의 수.
+        freeze: 백본 네트워크를 동결할지 여부.
         n_gpu: 사용할 GPU의 수, 1보다 크면 멀티 GPU 모델로 설정.
 
     Returns:
         모델 저장용 모델과 훈련용 모델.
     """
-    # 사용할 장치를 설정 (CUDA가 사용 가능하고 n_gpu가 0보다 크면 GPU 사용)
     device = torch.device('cuda' if torch.cuda.is_available() and n_gpu > 0 else 'cpu')
 
-    # YOLOv8 모델을 정의합니다.
-    # 모델 생성 부분은 주석 처리되어 있으며, 필요한 경우 활성화하여 사용해야 합니다.
+    # YOLOv8 모델을 정의합니다. 실제 YOLOv8 구현에 따라 인자 및 모델 생성 방법이 달라질 수 있습니다.
+#    model = YOLO(num_classes=num_classes)  # YOLOv8 모델 인스턴스 생성
 
     # 가중치 로딩
     if weights is not None:
         logging.info('모델 가중치를 로딩 중: %s', weights)
+#        model.load_state_dict(torch.load(weights, map_location=device))  # 가중치 로드
         # 모델 로드
         model = ultralytics.YOLO(weights)
 
@@ -76,6 +79,7 @@ def get_model(weights, n_gpu=None):
     return model
 
 # YOLOv8 모델을 생성
+#model = ultralytics.YOLO(weights)
 model = get_model(weights, gpu_opts['n_gpu'])
 
 # 입력 비디오 파일의 경로를 설정
@@ -159,5 +163,5 @@ def detect_in_video_file(model, video_in, output_path, name, rate=1):
     return results
 
 
-# 비디오 파일에서 객체 탐지 수행
+#detect_in_video_file(model, video_in, output_folder.get_path(), rate)
 results = detect_in_video_file(model, video_in, output_folder.get_path(), configs['video_name'], rate)
