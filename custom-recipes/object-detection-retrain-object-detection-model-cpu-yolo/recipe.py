@@ -190,14 +190,35 @@ model = YOLO(weights)  # 사전 학습된 가중치를 로드하여 YOLO 모델�
 project_path = op.join(output_folder.get_path(), 'project')  # 모델 훈련 결과를 저장할 프로젝트 경로를 설정합니다.
 
 # 모델 훈련
+#model.train(
+#    data=yaml_file_path,  # YAML 파일 경로를 설정합니다.
+#    epochs=int(configs.get('epochs', 1)),  # 훈련 에포크 수를 설정합니다. 기본값은 1입니다.
+#    batch=batch_size,  # 배치 크기를 설정합니다.
+#    imgsz=min_side,  # 이미지 크기를 설정합니다.
+#    device='cuda' if gpu_opts.get('n_gpu', 0) != 0 else 'cpu',  # GPU가 사용 가능하면 'cuda', 아니면 'cpu'를 설정합니다.
+#    project=project_path,  # 훈련 결과를 저장할 프로젝트 경로를 설정합니다.
+#    name='yolov8_training'  # 프로젝트 이름을 설정합니다.
+#)
+
 model.train(
     data=yaml_file_path,  # YAML 파일 경로를 설정합니다.
+
     epochs=int(configs.get('epochs', 1)),  # 훈련 에포크 수를 설정합니다. 기본값은 1입니다.
     batch=batch_size,  # 배치 크기를 설정합니다.
     imgsz=min_side,  # 이미지 크기를 설정합니다.
+
     device='cuda' if gpu_opts.get('n_gpu', 0) != 0 else 'cpu',  # GPU가 사용 가능하면 'cuda', 아니면 'cpu'를 설정합니다.
     project=project_path,  # 훈련 결과를 저장할 프로젝트 경로를 설정합니다.
-    name='yolov8_training'  # 프로젝트 이름을 설정합니다.
+    name='yolov8_training',  # 프로젝트 이름을 설정합니다.
+
+    lr=float(configs.get('lr', 0.01)),  # 학습률을 설정합니다. 기본값은 0.01입니다.
+    weight_decay=float(configs.get('weight_decay', 0.0005)),  # 가중치 감소를 설정합니다. 기본값은 0.0005입니다.
+
+    augment=configs.get('augment', True),  # 데이터 증강 여부를 설정합니다. 기본값은 True입니다.
+    patience=int(configs.get('patience', 10)),  # 조기 종료를 위한 인내심을 설정합니다. 기본값은 10입니다.
+
+    save_period=int(configs.get('save_period', 5)),  # 모델 저장 주기를 설정합니다. 기본값은 5입니다.
+    image_weights=configs.get('image_weights', False)  # 이미지 가중치 사용 여부를 설정합니다. 기본값은 False입니다.
 )
 
 # 훈련된 모델을 저장합니다.
