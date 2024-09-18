@@ -1,0 +1,68 @@
+// 이 파일은 Custom code recipe인 create_patches의 설명서입니다.
+{
+    // 디스플레이 목적의 메타데이터
+    "meta": {
+        "label": "Retrain object detection model (CPU) yolo", // 레시피의 이름
+        "description": "This recipe allows you to fine-tune the detection yolo model to detect new objects.", 
+        // 레시피 설명: 이 레시피는 YOLO 모델을 미세 조정하여 새로운 객체를 탐지할 수 있도록 합니다.
+        "icon": "icon-gears" // 레시피에 사용할 아이콘
+    },
+
+    // 레시피의 종류를 PYTHON으로 설정 (Python 코드 기반 레시피)
+    "kind": "PYTHON",
+
+    // 입력 및 출력은 역할(Role)에 의해 정의됩니다. 레시피의 I/O 탭에서 사용자는 각 입력 및 출력 역할에 하나 이상의 데이터셋을 연결할 수 있습니다.
+
+    // "arity" 필드는 사용자가 역할에 여러 데이터셋을 연결할 수 있는지('NARY') 아니면 최대 하나만 연결할 수 있는지('UNARY')를 나타냅니다.
+    // "required" 필드는 사용자가 역할에 데이터셋을 연결하지 않아도 되는지 여부를 나타냅니다.
+
+    "inputRoles": [
+        {
+            "name": "images", // 입력 역할의 이름
+            "label": "Folder containing the images", // 입력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": false, // 데이터셋을 입력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 입력으로 허용
+        },
+        {
+            "name": "bounding_boxes", // 입력 역할의 이름
+            "label": "Dataset of bounding boxes", // 입력 역할의 레이블
+            "arity": "UNARY", // 이 역할에는 하나의 데이터셋만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": true, // 데이터셋을 입력으로 허용
+            "acceptsManagedFolder": false // 관리 폴더를 입력으로 허용하지 않음
+        },
+        {
+            "name": "weights", // 입력 역할의 이름
+            "label": "Initial weights", // 입력 역할의 레이블
+            "description": "Initial weights.", // 이 역할의 추가 설명
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": true, // 이 역할은 필수 입력임
+            "acceptsDataset": false, // 데이터셋을 입력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 입력으로 허용
+        }
+    ],
+
+    "outputRoles": [
+        {
+            "name": "model", // 출력 역할의 이름
+            "label": "Trained model", // 출력 역할의 레이블
+            "description": "Folder where the trained model will be stored.", 
+            // 이 역할의 설명: 훈련된 모델이 저장될 폴더.
+            "arity": "UNARY", // 이 역할에는 하나의 폴더만 연결할 수 있음
+            "required": true, // 이 역할은 필수 출력임
+            "acceptsDataset": false, // 데이터셋을 출력으로 허용하지 않음
+            "acceptsManagedFolder": true // 관리 폴더(Managed Folder)를 출력으로 허용
+        }
+    ],
+
+    // 레시피에서 사용할 HTML 파라미터 템플릿 파일을 지정
+    "paramsTemplate": "retrain-recipe-template.html",
+
+    // 레시피에서 사용할 파라미터 모듈을 지정
+    "paramsModule": "detectionRecipe.retrain",
+
+    // 레시피 실행 전에 호출될 Python 설정 파일을 지정
+    "paramsPythonSetup": "recipes-helper.py"
+}
