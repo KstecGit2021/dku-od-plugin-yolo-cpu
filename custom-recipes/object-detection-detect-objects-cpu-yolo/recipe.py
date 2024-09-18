@@ -92,7 +92,7 @@ for result in results:
             label_name = labels_to_names[int(label)]  # 라벨 이름을 가져옴
 
             # 결과를 데이터프레임에 추가
-            df.loc[df_idx] = [image] + int_box + [label_name, round(score, 2)]
+            df.loc[df_idx] = [image] + int_box + [label_name, round(conf, 2)]
             df_idx += 1
 
         # 탐지된 객체가 없고, 설정에 따라 누락된 경우를 기록
