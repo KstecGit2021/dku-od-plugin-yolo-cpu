@@ -118,7 +118,7 @@ def compute_metrics(true_pos, false_pos, false_neg):
 
     return precision, recall, f1
 
-def draw_bboxes(src_path, dst_path, df, label_cap, confidence_cap, ids):
+def draw_bboxes_retinanet(src_path, dst_path, df, label_cap, confidence_cap, ids):
     """Draw boxes on images.
 
     Args:
