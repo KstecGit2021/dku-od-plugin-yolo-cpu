@@ -57,6 +57,7 @@ app.controller('retrainRecipeController', function($scope) {
         initVariable("max_shear", 0.1); // 최대 전단 비율 초기화
         initVariable("min_scaling", 0.9); // 최소 스케일링 비율 초기화
         initVariable("max_scaling", 1.1); // 최대 스케일링 비율 초기화
+        initVariable("augment", true); // 데이터 증강 사용 여부 여부 초기화
         initVariable("reducelr", false); // 학습률 감소 사용 여부 초기화
         initVariable("reducelr_patience", 2); // 학습률 감소의 인내 기간 초기화
         initVariable("reducelr_factor", 0.1); // 학습률 감소 인자 초기화
